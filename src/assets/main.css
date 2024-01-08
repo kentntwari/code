@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-violet-primary: 124 93 250;
+    --color-violet-secondary: 146 119 255;
+    --color-slate-primary: 30 33 57;
+    --color-slate-secondary: 223 227 250;
+    --color-gray-primary: 37 41 69;
+    --color-gray-secondary: 126 136 195;
+    --color-gray-tertiary: 136 142 176;
+    --color-zinc-primary: 12 14 22;
+    --color-zinc-secondary: 20 22 37;
+    --color-red-primary: 236 87 87;
+    --color-red-secondary: 255 151 151;
+    --color-background-light: 248 248 251;
+    --color-background-dark: 20 22 37;
+    /* ... */
+  }
+}
