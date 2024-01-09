@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Invoice {
+  id           String   @id @unique
+  status       String   @default("draft")
+  description  String?
+  orders       Order[]
+  paymentTerms Int
+  dueDate      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  Client       Client?  @relation(fields: [clientId], references: [id])
+  clientId     Int?
+
+  @@index(fields: [id], name: "id_invoice_idx")
+  @@map("invoices")
+}
+
+model Sender {
+  id       Int      @id @default(autoincrement())
+  street   String   @unique @default("19 Union Terrace")
+  city     String   @default("London")
+  postcode String   @default("E1 3EZ")
+  country  String   @default("United Kingdom")
+  clients  Client[]
+
+  @@index(fields: [postcode], name: "id_sender_idx")
+  @@map("senders")
+}
+
+model Client {
+  id       Int       @id @default(autoincrement())
+  name     String
+  email    String
+  street   String
+  city     String
+  postcode String
+  country  String
+  orders   Order[]
+  invoices Invoice[]
+  Sender   Sender?   @relation(fields: [senderId], references: [id])
+  senderId Int?
+
+  @@unique([name, email, street, city, postcode, country], name: "clientSpecs")
+  @@index(fields: [id], name: "id_client_idx")
+  @@map("clients")
+}
+
+model Order {
+  id        String  @id @default(cuid())
+  item      String  @map("item_name")
+  quantity  Int     @map("item_quantity")
+  price     Decimal @map("item_price") @db.Decimal(18, 2)
+  currency  String  @default("GBP")
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId String
+  Client    Client? @relation(fields: [clientId], references: [id])
+  clientId  Int?
+
+  @@index(fields: [id], name: "id_order_idx")
+  @@map("orders")
+}
