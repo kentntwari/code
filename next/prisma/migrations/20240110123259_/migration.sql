@@ -8,6 +8,7 @@ CREATE TABLE "invoices" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "clientId" INTEGER,
+    "sentFromId" INTEGER,
 
     CONSTRAINT "invoices_pkey" PRIMARY KEY ("id")
 );
@@ -70,6 +71,9 @@ CREATE UNIQUE INDEX "clients_name_email_street_city_postcode_country_key" ON "cl
 
 -- CreateIndex
 CREATE INDEX "id_order_idx" ON "orders"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "orders_item_name_item_quantity_item_price_currency_invoiceI_key" ON "orders"("item_name", "item_quantity", "item_price", "currency", "invoiceId");
 
 -- AddForeignKey
 ALTER TABLE "invoices" ADD CONSTRAINT "invoices_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "clients"("id") ON DELETE SET NULL ON UPDATE CASCADE;

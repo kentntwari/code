@@ -14,59 +14,65 @@ model Invoice {
   id           String   @id @unique
   status       String   @default("draft")
   description  String?
+  paymentTerms Int      @map("payment_terms")
+  dueDate      DateTime @map("due_date")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
   orders       Order[]
-  paymentTerms Int
-  dueDate      DateTime
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  Client       Client?  @relation(fields: [clientId], references: [id])
-  clientId     Int?
+  sender       Sender[]
+  clientEmail  String   @map("client_email")
+  client       Client   @relation(fields: [clientEmail], references: [id])
 
   @@index(fields: [id], name: "id_invoice_idx")
   @@map("invoices")
 }
 
 model Sender {
-  id       Int      @id @default(autoincrement())
-  street   String   @unique @default("19 Union Terrace")
-  city     String   @default("London")
-  postcode String   @default("E1 3EZ")
-  country  String   @default("United Kingdom")
+  id       String    @id @default(cuid())
+  street   String    @unique @default("19 Union Terrace")
+  city     String    @default("London")
+  postCode String    @default("E1 3EZ") @map("post_code")
+  country  String    @default("United Kingdom")
+  orders   Order[]
   clients  Client[]
+  Invoices Invoice[]
 
-  @@index(fields: [postcode], name: "id_sender_idx")
+  @@index(fields: [postCode], name: "id_sender_idx")
   @@map("senders")
 }
 
 model Client {
-  id       Int       @id @default(autoincrement())
+  id       String    @id @default(cuid())
   name     String
   email    String
   street   String
   city     String
-  postcode String
+  postCode String    @map("post_code")
   country  String
   orders   Order[]
   invoices Invoice[]
-  Sender   Sender?   @relation(fields: [senderId], references: [id])
-  senderId Int?
+  sender   Sender?   @relation(fields: [senderId], references: [id])
+  senderId String?   @map("sender_id")
 
-  @@unique([name, email, street, city, postcode, country], name: "clientSpecs")
+  @@unique([name, email, street, city, postCode, country], name: "client_specs")
   @@index(fields: [id], name: "id_client_idx")
   @@map("clients")
 }
 
 model Order {
-  id        String  @id @default(cuid())
-  item      String  @map("item_name")
-  quantity  Int     @map("item_quantity")
-  price     Decimal @map("item_price") @db.Decimal(18, 2)
-  currency  String  @default("GBP")
-  invoice   Invoice @relation(fields: [invoiceId], references: [id])
-  invoiceId String
-  Client    Client? @relation(fields: [clientId], references: [id])
-  clientId  Int?
+  id          String   @id @default(cuid())
+  item        String   @map("item_name")
+  quantity    Int      @map("item_quantity")
+  price       Decimal  @map("item_price") @db.Decimal(18, 2)
+  currency    String   @default("GBP")
+  invoice     Invoice? @relation(fields: [invoiceId], references: [id])
+  invoiceId   String?  @map("invoice_id")
+  client      Client?  @relation(fields: [clientEmail], references: [id])
+  clientEmail String?  @map("client_email")
+  sender      Sender?  @relation(fields: [senderId], references: [id])
+  senderId    String?  @map("sender_id")
 
+  @@unique([invoiceId], name: "invoice_id")
   @@index(fields: [id], name: "id_order_idx")
   @@map("orders")
 }
