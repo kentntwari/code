@@ -1,20 +1,11 @@
 <template>
   <article class="p-6 bg-white flex flex-col gap-6 rounded-lg shadow-sm">
     <header class="flex items-center justify-between">
-      <div class="font-bold text-SV">
-        <span class="text-gray-secondary">#</span>
-        <span>{{ invoice.id }}</span>
-      </div>
-      <small class="text-baseV text-gray-secondary">{{ invoice.clientName }}</small>
+      <slot name="header" :id="invoice.id" :clientName="invoice.clientName"></slot>
     </header>
+    <slot></slot>
     <footer class="flex items-center justify-between">
-      <div class="flex flex-col gap-2">
-        <small class="text-baseV text-gray-secondary">Due {{ invoice.paymentDue }}</small>
-        <span class="text-S">£ {{ invoice.total }}</span>
-      </div>
-      <Status class="capitalize" :status="invoice.status">
-        {{ invoice.status }}
-      </Status>
+      <slot name="footer" :due="paymentDue" :total="total" :status="status"></slot>
     </footer>
   </article>
 </template>
