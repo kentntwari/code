@@ -5,18 +5,17 @@
     </header>
     <slot></slot>
     <footer class="flex items-center justify-between">
-      <slot name="footer" :due="paymentDue" :total="total" :status="status"></slot>
+      <slot
+        name="footer"
+        :due="invoice.paymentDue"
+        :total="invoice.total"
+        :status="invoice.status"></slot>
     </footer>
   </article>
 </template>
 
 <script>
-import Status from "@/components/Status";
-
 export default {
-  components: {
-    Status,
-  },
   props: {
     invoice: {
       type: Object,
