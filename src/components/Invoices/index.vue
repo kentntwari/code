@@ -1,14 +1,8 @@
 <template>
-  <!-- nested new invoice route -->
-  <router-view></router-view>
-
-  <!-- everything else -->
   <header class="w-full flex items-center justify-between">
     <div class="text-base text-gray-secondary">
       <h1 class="font-bold text-M">Invoices</h1>
-      <small
-        >{{ invoices.flat().length > 0 ? invoices.flat().length : "No" }} invoices</small
-      >
+      <small>{{ invoices.length > 0 ? invoices.length : "No" }} invoices</small>
     </div>
 
     <RouterLink to="/new">
@@ -21,7 +15,7 @@
     </RouterLink>
   </header>
 
-  <section class="max-w-52 flex-1" v-if="!invoices.flat().length">
+  <section class="max-w-52 flex-1" v-if="!invoices.length">
     <EmptyPackageSVG />
 
     <div class="flex flex-col items-center justify-center gap-6">
@@ -32,11 +26,13 @@
     </div>
   </section>
 
-  <slot :invoices="invoices.flat()" v-else />
+  <slot :invoices="invoices" v-else />
 </template>
 
 <script>
-import data from "@/data.json";
+// utils
+import { ofetch } from "ofetch";
+
 // components
 import { RouterLink } from "vue-router";
 import EmptyPackageSVG from "@/components/Svg/EmptyPackage";
@@ -51,11 +47,14 @@ export default {
       invoices: [],
     };
   },
-  beforeMount(){
-    
+  created() {
+    this.fetchInvoices();
   },
-  mounted() {
-    this.invoices.push(data);
+  methods: {
+    async fetchInvoices() {
+      const data = await ofetch("http://localhost:3000/api/invoices");
+      this.invoices = data;
+    },
   },
 };
 </script>

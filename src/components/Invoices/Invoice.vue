@@ -1,20 +1,22 @@
 <template>
-  <article class="p-6 bg-white flex flex-col gap-6 rounded-lg shadow-sm">
+  <article>
     <header class="flex items-center justify-between">
-      <slot name="header" :id="invoice.id" :clientName="invoice.clientName"></slot>
+      <slot name="header" :id="invoice.id" :clientName="invoice.client.name"></slot>
     </header>
-    <slot></slot>
+    <slot v-bind="invoice"></slot>
     <footer class="flex items-center justify-between">
       <slot
         name="footer"
-        :due="invoice.paymentDue"
-        :total="invoice.total"
+        :dueDate="dueDate"
+        :total="invoice.grandTotal"
         :status="invoice.status"></slot>
     </footer>
   </article>
 </template>
 
 <script>
+import { formatDate } from "@/helpers/formatDate.js";
+
 export default {
   props: {
     invoice: {
@@ -22,12 +24,10 @@ export default {
       required: true,
     },
   },
-  mounted() {
-    if (!this.invoice.id) throw new Error("Invoice must have an id");
-    if (!this.invoice.total) throw new Error("Invoice must have a total");
-    if (!this.invoice.status) throw new Error("Invoice must have a status");
-    if (!this.invoice.clientName) throw new Error("Invoice must have a clientName");
-    if (!this.invoice.paymentDue) throw new Error("Invoice must have a paymentDue");
+  computed: {
+    dueDate() {
+      return formatDate(this.invoice.dueDate);
+    },
   },
 };
 </script>
