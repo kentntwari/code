@@ -2,7 +2,8 @@
   <Invoices v-slot="{ invoices }">
     <ul class="mt-8 flex-1 flex flex-col gap-4">
       <li v-for="invoice in invoices" :key="randomKey()">
-        <RouterLink :to="{ name: 'invoice', params: { id: invoice.id.toLowerCase() } }">
+        <RouterLink
+          :to="{ name: 'invoice', params: { invoiceId: invoice.id.toLowerCase() } }">
           <Invoice
             class="p-6 bg-white flex flex-col gap-6 rounded-lg shadow-sm"
             :invoice="invoice">

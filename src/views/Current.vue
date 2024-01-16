@@ -99,7 +99,8 @@
 
       <button
         type="button"
-        class="w-[93px] h-12 bg-red-primary flex items-center justify-center font-bold text-baseV text-white rounded-full">
+        class="w-[93px] h-12 bg-red-primary flex items-center justify-center font-bold text-baseV text-white rounded-full"
+        @click="deleteInvoice">
         Delete
       </button>
 
@@ -116,8 +117,6 @@
 </template>
 
 <script>
-// utils
-import { ofetch } from "ofetch";
 import { formatDate } from "@/helpers/formatDate";
 
 // components
@@ -157,39 +156,28 @@ export default {
     this.$watch(
       () => this.$route.params.id,
       () => {
-        this.fetchData();
+        this.fetchInvoice();
       },
       { immediate: true }
     );
   },
   methods: {
-    async fetchData() {
-      const data = await ofetch(
-        `http://localhost:3000/api/invoices/${this.$route.params.id}`,
-        {
-          onRequest: async ({ request }) => {
-            this.loading = true;
-          },
-          onResponse: async (res) => {
-            this.loading = false;
-          },
-          onRequestError: async ({ request, error }) => {
-            // Log error
-            console.log("[fetch request error]", request, error);
-          },
-          onResponseError: async ({ request, response }) => {
-            // Log error
-            console.log(
-              "[fetch response error]",
-              request,
-              response.status,
-              response.body
-            );
-          },
-        }
-      );
+    async fetchInvoice() {
+      const data = await this.$fetch(`/api/invoices/${this.$route.params.id}`, {
+        onRequest: async ({ request }) => {
+          this.loading = true;
+        },
+        onResponse: async (res) => {
+          this.loading = false;
+        },
+      });
 
       this.invoice = data;
+    },
+    async deleteInvoice() {
+      await this.$fetch(`/api/invoices/${this.$route.params.id}`, {
+        method: "DELETE",
+      });
     },
   },
 };
