@@ -18,7 +18,7 @@ const router = createRouter({
       ],
     },
     {
-      path: "/invoice/:id",
+      path: "/invoice/:invoiceId",
       name: "invoice",
       component: Current,
       children: [
