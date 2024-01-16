@@ -5,11 +5,6 @@ import { extendedPrisma } from "../../../../lib/prismaClient";
 // const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
-  if (req.headers.origin !== process.env.REMOTE_ORIGIN) {
-    res.status(403).json({ message: "Not allowed" });
-    return;
-  }
-  res.setHeader("Access-Control-Allow-Origin", process.env.REMOTE_ORIGIN);
   res.setHeader("Access-Control-Allow-Methods", "GET");
 
   switch (req.method) {

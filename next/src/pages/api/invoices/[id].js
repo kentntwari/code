@@ -4,11 +4,6 @@ import { prisma, extendedPrisma } from "../../../../lib/prismaClient";
 // const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
-  if (req.headers.origin !== process.env.REMOTE_ORIGIN) {
-    res.status(403).json({ message: "Not allowed" });
-    return;
-  }
-  res.setHeader("Access-Control-Allow-Origin", process.env.REMOTE_ORIGIN);
   res.setHeader("Access-Control-Allow-Methods", "GET", "POST", "PUT", "DELETE");
 
   switch (req.method) {
@@ -18,7 +13,7 @@ export default async function handler(req, res) {
           const invoice = await tx.invoice.findFirst({
             where: {
               id: {
-                equals: req.query.id,
+                equals: req.query.invoiceId,
                 mode: "insensitive",
               },
             },
@@ -42,6 +37,58 @@ export default async function handler(req, res) {
         });
 
         res.status(200).json(condensed);
+        extendedPrisma.$disconnect();
+        return;
+      } catch (err) {
+        res.status(500).json({ message: "Something went wrong", error: err.message });
+        extendedPrisma.$disconnect();
+        return;
+      }
+    }
+
+    case "DELETE": {
+      try {
+        await extendedPrisma.$transaction(async (trx) => {
+          const orders = await trx.order.findMany({
+            where: {
+              invoiceId: req.query.invoiceId.toUpperCase(),
+            },
+          });
+
+          await trx.client.update({
+            where: {
+              id: req.query.clientId,
+            },
+            data: {
+              invoices: {
+                disconnect: [
+                  {
+                    id: req.query.invoiceId.toUpperCase(),
+                  },
+                ],
+              },
+              orders: {
+                disconnect: orders.map((order) => ({
+                  id: order.id,
+                })),
+              },
+            },
+          });
+
+          await trx.order.deleteMany({
+            where: {
+              invoiceId: req.query.invoiceId.toUpperCase(),
+            },
+          });
+
+          await trx.invoice.delete({
+            where: {
+              id: req.query.invoiceId.toUpperCase(),
+            },
+          });
+        });
+
+        res.status(204).end();
         extendedPrisma.$disconnect();
         return;
       } catch (err) {
