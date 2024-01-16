@@ -1,11 +1,11 @@
-import { prisma } from "../lib/prismaClient";
+import { extendedPrisma } from "../lib/prismaClient.js";
 // import { PrismaClient } from "@prisma/client";
 
 // const prisma = new PrismaClient();
 
 async function main() {
   //Invoice 1
-  const invoice1 = await prisma.$transaction(async (tx) => {
+  const invoice1 = await extendedPrisma.$transaction(async (tx) => {
     const client = await tx.client.upsert({
       where: {
         client_specs: {
@@ -80,7 +80,7 @@ async function main() {
   });
 
   //Invoice 2
-  const invoice2 = await prisma.$transaction(async (tx) => {
+  const invoice2 = await extendedPrisma.$transaction(async (tx) => {
     const client = await tx.client.upsert({
       where: {
         client_specs: {
@@ -166,10 +166,10 @@ async function main() {
 
 main()
   .then(async () => {
-    await prisma.$disconnect();
+    await extendedPrisma.$disconnect();
   })
   .catch(async (e) => {
     console.error(e);
-    await prisma.$disconnect();
+    await extendedPrisma.$disconnect();
     process.exit(1);
   });
