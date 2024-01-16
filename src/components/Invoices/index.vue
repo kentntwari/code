@@ -30,9 +30,6 @@
 </template>
 
 <script>
-// utils
-import { ofetch } from "ofetch";
-
 // components
 import { RouterLink } from "vue-router";
 import EmptyPackageSVG from "@/components/Svg/EmptyPackage";
@@ -52,7 +49,7 @@ export default {
   },
   methods: {
     async fetchInvoices() {
-      const data = await ofetch("http://localhost:3000/api/invoices");
+      const data = await this.$fetch("/api/invoices");
       this.invoices = data;
     },
   },
