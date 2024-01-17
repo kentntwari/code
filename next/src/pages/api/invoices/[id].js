@@ -13,7 +13,7 @@ export default async function handler(req, res) {
           const invoice = await tx.invoice.findFirst({
             where: {
               id: {
-                equals: req.query.invoiceId,
+                equals: req.query.id,
                 mode: "insensitive",
               },
             },
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
         extendedPrisma.$disconnect();
         return;
       } catch (err) {
-        res.status(500).json({ message: "Something went wrong", error: err.message });
+        res.status(500).json({ message: "Something went wrong" });
         extendedPrisma.$disconnect();
         return;
       }
@@ -48,24 +48,29 @@ export default async function handler(req, res) {
 
     case "DELETE": {
       try {
-        await extendedPrisma.$transaction(async (trx) => {
-          const orders = await trx.order.findMany({
-            where: {
-              invoiceId: req.query.invoiceId.toUpperCase(),
+        const invoice = await extendedPrisma.invoice.findFirst({
+          where: {
+            id: {
+              equals: req.query.id,
+              mode: "insensitive",
             },
-          });
+          },
+        });
 
+        const orders = await extendedPrisma.order.findMany({
+          where: {
+            invoiceId: invoice.id,
+          },
+        });
+
+        await extendedPrisma.$transaction(async (trx) => {
           await trx.client.update({
             where: {
-              id: req.query.clientId,
+              id: invoice.clientId,
             },
             data: {
               invoices: {
-                disconnect: [
-                  {
-                    id: req.query.invoiceId.toUpperCase(),
-                  },
-                ],
+                disconnect: [{ id: invoice.id }],
               },
               orders: {
                 disconnect: orders.map((order) => ({
@@ -77,13 +82,13 @@ export default async function handler(req, res) {
 
           await trx.order.deleteMany({
             where: {
-              invoiceId: req.query.invoiceId.toUpperCase(),
+              invoiceId: invoice.id,
             },
           });
 
           await trx.invoice.delete({
             where: {
-              id: req.query.invoiceId.toUpperCase(),
+              id: invoice.id,
             },
           });
         });
@@ -92,7 +97,7 @@ export default async function handler(req, res) {
         extendedPrisma.$disconnect();
         return;
       } catch (err) {
-        res.status(500).json({ message: "Something went wrong", error: err.message });
+        res.status(500).json({ message: "Something went wrong" });
         extendedPrisma.$disconnect();
         return;
       }
