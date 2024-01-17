@@ -83,32 +83,35 @@
 
   <footer class="px-6 pt-6">
     <nav class="flex items-center gap-2" title="invoice navigation">
-      <RouterLink
-        v-if="invoice"
-        :to="{
-          name: 'Edit invoice',
-          path: '/edit',
-          params: { id: invoice.id },
-        }">
-        <button
-          type="edit"
-          class="w-20 h-12 bg-white flex items-center justify-center capitalize text-base text-gray-secondary rounded-full">
-          Edit
-        </button>
-      </RouterLink>
+      <ActionsProvider>
+        <template #edit>
+          <RouterLink
+            v-if="invoice"
+            :to="{
+              name: 'Edit invoice',
+              path: '/edit',
+              params: { id: invoice.id },
+            }">
+            <button
+              type="edit"
+              class="w-20 h-12 bg-white flex items-center justify-center capitalize text-base text-gray-secondary rounded-full">
+              Edit
+            </button>
+          </RouterLink>
+        </template>
 
-      <button
-        type="button"
-        class="w-[93px] h-12 bg-red-primary flex items-center justify-center font-bold text-baseV text-white rounded-full"
-        @click="deleteInvoice">
-        Delete
-      </button>
+        <template #delete>
+          <DeleteInvoice />
+        </template>
 
-      <button
-        type="button"
-        class="w-[150px] h-12 bg-violet-primary flex items-center justify-center font-bold text-baseV text-white rounded-full">
-        Mark as Paid
-      </button>
+        <template #markAsPaid>
+          <button
+            type="button"
+            class="w-[150px] h-12 bg-violet-primary flex items-center justify-center font-bold text-baseV text-white rounded-full">
+            Mark as Paid
+          </button>
+        </template>
+      </ActionsProvider>
     </nav>
   </footer>
 
@@ -125,6 +128,8 @@ import Status from "@/components/Status";
 import Address from "@/components/Address";
 import Table from "@/components/Orders/Table";
 import ArrowLeftSVG from "@/components/Svg/ArrowLeft";
+import ActionsProvider from "@/components/Actions/Provider";
+import DeleteInvoice from "@/components/Actions/DeleteInvoice";
 
 export default {
   name: "Current",
@@ -133,6 +138,8 @@ export default {
     Status,
     Address,
     OrdersTable: Table,
+    ActionsProvider,
+    DeleteInvoice,
   },
   data() {
     return {
@@ -154,7 +161,7 @@ export default {
   },
   created() {
     this.$watch(
-      () => this.$route.params.id,
+      () => this.$route.params.invoiceId,
       () => {
         this.fetchInvoice();
       },
@@ -163,7 +170,7 @@ export default {
   },
   methods: {
     async fetchInvoice() {
-      const data = await this.$fetch(`/api/invoices/${this.$route.params.id}`, {
+      const data = await this.$fetch(`/api/invoices/${this.$route.params.invoiceId}`, {
         onRequest: async ({ request }) => {
           this.loading = true;
         },
@@ -175,7 +182,7 @@ export default {
       this.invoice = data;
     },
     async deleteInvoice() {
-      await this.$fetch(`/api/invoices/${this.$route.params.id}`, {
+      await this.$fetch(`/api/invoices/${this.$route.params.invoiceId}`, {
         method: "DELETE",
       });
     },
