@@ -4,7 +4,7 @@ export default {
   install: (app, options) => {
     app.config.globalProperties.$fetch = ofetch.create({
       retry: 5,
-      retryDelay: 500,
+      retryDelay: 2500,
       timeout: 3000,
       onRequestError: async ({ request, error }) => {
         // Log error
