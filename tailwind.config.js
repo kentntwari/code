@@ -82,6 +82,12 @@ export default {
         black: {
           site: "rgb(var(--color-black-site) / <alpha-value>)",
         },
+        light: {
+          site: "rgb(var(--color-background-light) / <alpha-value>)",
+        },
+        dark: {
+          site: "rgb(var(--color-background-dark) / <alpha-value>)",
+        },
         status: {
           paid: "rgb(var(--color-status-paid) / <alpha-value>)",
           draft: "rgb(var(--color-status-draft) / <alpha-value>)",
