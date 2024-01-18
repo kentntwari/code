@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "@/views/Dashboard.vue";
 import Current from "@/views/Current.vue";
-import EditInvoice from "@/views/Edit.vue";
+import EditInvoice from "./views/Edit.vue";
 import New from "@/views/New.vue";
 
 const router = createRouter({
@@ -24,13 +24,16 @@ const router = createRouter({
       children: [
         {
           path: "edit",
-          name: "Edit invoice",
+          name: "edit",
           component: EditInvoice,
         },
       ],
     },
     ,
   ],
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 };
+  },
 });
 
 export default router;
