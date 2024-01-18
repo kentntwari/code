@@ -74,7 +74,7 @@
     </div>
 
     <footer class="px-6 pt-6">
-      <ActionsProvider :invoice="invoice">
+      <InvoiceActionsProvider>
         <nav class="flex items-center gap-2" title="invoice navigation">
           <button
             type="edit"
@@ -90,7 +90,7 @@
           <DeleteInvoice />
           <MarkAsPaidInvoice />
         </nav>
-      </ActionsProvider>
+      </InvoiceActionsProvider>
     </footer>
   </template>
 
@@ -117,14 +117,17 @@ import { formatDate } from "@/helpers/formatDate";
 
 // components
 import { RouterView } from "vue-router";
+
 import Status from "@/components/Status";
 import Address from "@/components/Address";
 import Table from "@/components/Orders/Table";
 import GoBackBtn from "@/components/Misc/GoBack.vue";
 import ArrowLeftSVG from "@/components/Svg/ArrowLeft";
-import ActionsProvider from "@/components/Actions/Provider";
 import DeleteInvoice from "@/components/Actions/DeleteInvoice";
 import MarkAsPaidInvoice from "@/components/Actions/MarkAsPaidInvoice.vue";
+
+import InvoiceActionsProvider from "@/Providers/InvoiceActions";
+import { computed } from "vue";
 
 export default {
   name: "Current",
@@ -133,7 +136,7 @@ export default {
     Status,
     Address,
     OrdersTable: Table,
-    ActionsProvider,
+    InvoiceActionsProvider,
     DeleteInvoice,
     GoBackBtn,
     MarkAsPaidInvoice,
@@ -156,6 +159,11 @@ export default {
       return "p-6";
     },
   },
+  provide() {
+    return {
+      invoice: computed(() => this.invoice),
+    };
+  },
   created() {
     this.$watch(
       () => this.$route.params.invoiceId,
@@ -168,10 +176,10 @@ export default {
   methods: {
     async fetchInvoice() {
       const data = await this.$fetch(`/api/invoices/${this.$route.params.invoiceId}`, {
-        onRequest: async ({ request }) => {
+        onRequest: async () => {
           this.loading = true;
         },
-        onResponse: async (res) => {
+        onResponse: async () => {
           this.loading = false;
         },
       });

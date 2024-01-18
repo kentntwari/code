@@ -11,6 +11,19 @@
             Edit <span class="text-gray-secondary">#</span
             >{{ this.$route.params.invoiceId.toUpperCase() }}</DialogTitle
           >
+          <form class="mt-5 grid grid-cols-1 gap-6">
+            <FormFieldSet legend="Bill From">
+              <FormAddress for="sender" />
+            </FormFieldSet>
+
+            <FormFieldSet legend="Bill To">
+              <FormAddress for="client" />
+            </FormFieldSet>
+
+            <FormFieldSet>
+              <FormInput />
+            </FormFieldSet>
+          </form>
         </DialogContent>
       </DialogOverlay>
     </DialogPortal>
@@ -30,6 +43,9 @@ import {
 } from "radix-vue";
 
 import GoBack from "@/components/Misc/GoBack.vue";
+import Input from "@/components/Form/Input";
+import FieldSet from "@/components/Form/FieldSet";
+import Address from "@/components/Form/Address";
 
 export default {
   name: "EditInvoice",
@@ -44,6 +60,9 @@ export default {
     DialogTitle,
     DialogTrigger,
     GoBackBtn: GoBack,
+    FormInput: Input,
+    FormAddress: Address,
+    FormFieldSet: FieldSet,
   },
 
   data() {
