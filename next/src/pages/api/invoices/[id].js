@@ -4,22 +4,27 @@ import { prisma, extendedPrisma } from "../../../../lib/prismaClient";
 // const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Methods", "GET", "POST", "PUT", "DELETE");
+  res.setHeader("Access-Control-Allow-Methods", "GET", "POST", "PUT", "PATCH", "DELETE");
+
+  if (!["GET", "POST", "PUT", "PATCH", "DELETE"].includes(req.method)) {
+    res.status(405).json({ message: `Method ${req.method} Not Allowed` });
+    return;
+  }
+
+  const invoice = await extendedPrisma.invoice.findFirst({
+    where: {
+      id: {
+        equals: req.query.id,
+        mode: "insensitive",
+      },
+    },
+    include: { client: true, orders: true },
+  });
 
   switch (req.method) {
     case "GET": {
       try {
         const condensed = await extendedPrisma.$transaction(async (tx) => {
-          const invoice = await tx.invoice.findFirst({
-            where: {
-              id: {
-                equals: req.query.id,
-                mode: "insensitive",
-              },
-            },
-            include: { client: true, orders: true },
-          });
-
           const arrayOfSenderId = invoice.orders.map((order) => order.senderId);
 
           const senders = await tx.sender.findMany({
@@ -46,17 +51,36 @@ export default async function handler(req, res) {
       }
     }
 
-    case "DELETE": {
+    case "PATCH": {
+      const incomingHeaders = new Headers(req.headers);
+
+      if (incomingHeaders.get("X-patch-request-action") !== "mark-as-paid") {
+        res.status(400).json({ message: "Invalid request action" });
+        return;
+      }
+
       try {
-        const invoice = await extendedPrisma.invoice.findFirst({
+        await extendedPrisma.invoice.update({
           where: {
-            id: {
-              equals: req.query.id,
-              mode: "insensitive",
-            },
+            id: invoice.id,
+          },
+          data: {
+            status: "paid",
           },
         });
 
+        res.status(200).end();
+        extendedPrisma.$disconnect();
+        return;
+      } catch (error) {
+        res.status(500).json({ message: "Something went wrong" });
+        extendedPrisma.$disconnect();
+        return;
+      }
+    }
+
+    case "DELETE": {
+      try {
         const orders = await extendedPrisma.order.findMany({
           where: {
             invoiceId: invoice.id,
