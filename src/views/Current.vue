@@ -1,17 +1,10 @@
 <template>
   <header>
-    <button
-      type="button"
-      title="Go back"
-      class="flex items-center gap-6 cursor-pointer"
-      @click="$router.go(-1)">
-      <ArrowLeftSVG />
-      <h1 class="font-bold text-heading-S text-gray-primary">Go back</h1>
-    </button>
+    <GoBackBtn />
   </header>
 
-  <div class="mt-8">
-    <template v-if="invoice">
+  <template v-if="invoice">
+    <div class="mt-8">
       <div class="p-6 bg-white flex items-center justify-between rounded-lg">
         <span class="text-baseSV text-gray-secondary">Status</span>
         <Status :status="invoice.status" />
@@ -78,42 +71,42 @@
           </div>
         </footer>
       </section>
-    </template>
-  </div>
+    </div>
 
-  <footer class="px-6 pt-6">
-    <nav class="flex items-center gap-2" title="invoice navigation">
-      <ActionsProvider>
-        <template #edit>
-          <RouterLink
-            v-if="invoice"
-            :to="{
-              name: 'Edit invoice',
-              path: '/edit',
-              params: { id: invoice.id },
-            }">
-            <button
-              type="edit"
-              class="w-20 h-12 bg-white flex items-center justify-center capitalize text-base text-gray-secondary rounded-full">
-              Edit
-            </button>
-          </RouterLink>
-        </template>
-
-        <template #delete>
-          <DeleteInvoice />
-        </template>
-
-        <template #markAsPaid>
+    <footer class="px-6 pt-6">
+      <ActionsProvider :invoice="invoice">
+        <nav class="flex items-center gap-2" title="invoice navigation">
           <button
-            type="button"
-            class="w-[150px] h-12 bg-violet-primary flex items-center justify-center font-bold text-baseV text-white rounded-full">
-            Mark as Paid
+            type="edit"
+            class="w-20 h-12 bg-white flex items-center justify-center capitalize text-base text-gray-secondary rounded-full"
+            @click="
+              this.$router.push({
+                name: 'edit',
+                params: { invoiceId: invoice.id.toLowerCase() },
+              })
+            ">
+            Edit
           </button>
-        </template>
+          <DeleteInvoice />
+          <MarkAsPaidInvoice />
+        </nav>
       </ActionsProvider>
-    </nav>
-  </footer>
+    </footer>
+  </template>
+
+  <template v-if="!invoice">
+    <div class="mt-8 flex flex-col gap-5">
+      <div
+        class="bg-white w-90vh max-w-sm p-6 flex justify-between animate-pulse rounded-lg shadow-sm">
+        <div class="w-1/4 h-4 bg-gray-secondary opacity-40"></div>
+        <div class="w-1/2 h-4 bg-gray-secondary opacity-40"></div>
+      </div>
+      <div
+        class="w-90vh max-w-sm p-6 h-[300px] flex items-center justify-center animate-pulse">
+        <div class="loader" style="width: var(--spinner-width-large)"></div>
+      </div>
+    </div>
+  </template>
 
   <!-- nested edit or delete view -->
   <RouterView />
@@ -123,13 +116,15 @@
 import { formatDate } from "@/helpers/formatDate";
 
 // components
-import { RouterLink, RouterView } from "vue-router";
+import { RouterView } from "vue-router";
 import Status from "@/components/Status";
 import Address from "@/components/Address";
 import Table from "@/components/Orders/Table";
+import GoBackBtn from "@/components/Misc/GoBack.vue";
 import ArrowLeftSVG from "@/components/Svg/ArrowLeft";
 import ActionsProvider from "@/components/Actions/Provider";
 import DeleteInvoice from "@/components/Actions/DeleteInvoice";
+import MarkAsPaidInvoice from "@/components/Actions/MarkAsPaidInvoice.vue";
 
 export default {
   name: "Current",
@@ -140,6 +135,8 @@ export default {
     OrdersTable: Table,
     ActionsProvider,
     DeleteInvoice,
+    GoBackBtn,
+    MarkAsPaidInvoice,
   },
   data() {
     return {
@@ -180,11 +177,6 @@ export default {
       });
 
       this.invoice = data;
-    },
-    async deleteInvoice() {
-      await this.$fetch(`/api/invoices/${this.$route.params.invoiceId}`, {
-        method: "DELETE",
-      });
     },
   },
 };
