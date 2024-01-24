@@ -1,12 +1,36 @@
 <template>
-  <FormInput label="Street Address" type="text" :name="streetAdressName" class="mt-6" />
+  <FormInput
+    v-model:street="address.street"
+    :id="streetName"
+    :value="address.street"
+    label="Street Address"
+    type="text"
+    :name="streetName" />
 
   <div class="grid grid-cols-2 gap-6">
-    <FormInput label="City" type="text" :name="cityName" />
-    <FormInput label="Post Code" type="text" :name="postCodeName" />
+    <FormInput
+      v-model:city="address.city"
+      :id="cityName"
+      :value="address.city"
+      label="City"
+      type="text"
+      :name="cityName" />
+    <FormInput
+      v-model:post-code="address.postCode"
+      :id="postCodeName"
+      :value="address.postCode"
+      label="Post Code"
+      type="text"
+      :name="postCodeName" />
   </div>
 
-  <FormInput label="Country" type="text" :name="countryName" />
+  <FormInput
+    v-model:country="address.country"
+    :id="countryName"
+    :value="address.country"
+    label="Country"
+    type="text"
+    :name="countryName" />
 </template>
 
 <script>
@@ -23,19 +47,23 @@ export default {
       type: String,
       required: true,
     },
+    address: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
-    streetAdressName() {
-      return `${this.for.toLowerCase()} street address`;
+    streetName() {
+      return `${this.for.toLowerCase()}__street`;
     },
     cityName() {
-      return `${this.for.toLowerCase()} city`;
+      return `${this.for.toLowerCase()}__city`;
     },
     postCodeName() {
-      return `${this.for.toLowerCase()}post code`;
+      return `${this.for.toLowerCase()}__postCode`;
     },
     countryName() {
-      return `${this.for.toLowerCase()} country`;
+      return `${this.for.toLowerCase()}__country`;
     },
   },
   mounted() {
