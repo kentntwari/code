@@ -125,8 +125,7 @@ import GoBackBtn from "@/components/Misc/GoBack.vue";
 import ArrowLeftSVG from "@/components/Svg/ArrowLeft";
 import DeleteInvoice from "@/components/Actions/DeleteInvoice";
 import MarkAsPaidInvoice from "@/components/Actions/MarkAsPaidInvoice.vue";
-
-import InvoiceActionsProvider from "@/Providers/InvoiceActions";
+import InvoiceActionsProvider from "@/components/Actions/InvoiceActionsProvider";
 import { computed } from "vue";
 
 export default {
@@ -150,10 +149,18 @@ export default {
   },
   computed: {
     createdAt() {
-      return formatDate(this.invoice.createdAt);
+      const date = formatDate(this.invoice.createdAt).day;
+      const month = formatDate(this.invoice.createdAt).month;
+      const year = formatDate(this.invoice.createdAt).year;
+
+      return `${date} ${month} ${year}`;
     },
     dueDate() {
-      return formatDate(this.invoice.dueDate);
+      const date = formatDate(this.invoice.createdAt).day;
+      const month = formatDate(this.invoice.createdAt).month;
+      const year = formatDate(this.invoice.createdAt).year;
+
+      return `${date} ${month} ${year}`;
     },
     tablePadding() {
       return "p-6";

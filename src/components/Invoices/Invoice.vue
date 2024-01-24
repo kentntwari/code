@@ -26,7 +26,11 @@ export default {
   },
   computed: {
     dueDate() {
-      return formatDate(this.invoice.dueDate);
+      const day = formatDate(this.invoice.dueDate).day;
+      const month = formatDate(this.invoice.dueDate).month;
+      const year = formatDate(this.invoice.dueDate).year;
+
+      return `${day} ${month} ${year}`;
     },
   },
 };
