@@ -1,6 +1,8 @@
 <template>
   <fieldset class="flex flex-col gap-6">
-    <legend class="text-SV text-violet-primary" v-show="legend">{{ legend }}</legend>
+    <slot name="legend">
+      <legend class="text-SV text-violet-primary" v-show="legend">{{ legend }}</legend>
+    </slot>
     <slot></slot>
   </fieldset>
 </template>
