@@ -2,10 +2,10 @@
   <FormInput
     v-model:street="address.street"
     :id="streetName"
+    :name="streetName"
     :value="address.street"
     label="Street Address"
-    type="text"
-    :name="streetName" />
+    type="text" />
 
   <div class="grid grid-cols-2 gap-6">
     <FormInput
@@ -17,20 +17,20 @@
       :name="cityName" />
     <FormInput
       v-model:post-code="address.postCode"
+      :name="postCodeName"
       :id="postCodeName"
       :value="address.postCode"
       label="Post Code"
-      type="text"
-      :name="postCodeName" />
+      type="text" />
   </div>
 
   <FormInput
     v-model:country="address.country"
     :id="countryName"
     :value="address.country"
+    :name="countryName"
     label="Country"
-    type="text"
-    :name="countryName" />
+    type="text" />
 </template>
 
 <script>

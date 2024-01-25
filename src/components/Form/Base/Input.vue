@@ -6,7 +6,8 @@
       :type="type"
       :id="id"
       :name="$attrs.name ?? id"
-      :class="`${defaultInputClasses} ${$attrs.ic ?? ''}`"
+      class="default-input"
+      :class="`${$attrs.ic ?? ''}`"
       v-bind="$attrs"
       @click="onClickEvents"
       @change="dispatchEmitters($event)" />
@@ -39,7 +40,7 @@ export default {
 
   inheritAttrs: false,
 
-  inject: ["formData", "updateFormData", "defaultInputClasses"],
+  inject: ["formData", "updateFormData"],
 
   props: {
     type: {

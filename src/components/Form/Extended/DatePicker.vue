@@ -1,15 +1,15 @@
 <template>
   <FormInput
-    type="date"
-    label="Invoice Date"
     v-model:selected-date="selectedDate"
-    id="invoice__date"
     :lc="`${disableInput ? 'opacity-40' : 'opacity-100'}`"
-    :ic="`${defaultInputClasses} ${customDateInputClass}`"
     :value="universalizeDate(selectedDate)"
     :min="minimumDate"
     :data-date="selectedDate"
-    :disabled="disableInput" />
+    :disabled="disableInput"
+    type="date"
+    label="Invoice Date"
+    id="invoice__date"
+    ic="input-calendar" />
 </template>
 
 <script>
@@ -20,11 +20,7 @@ import Input from "./Input.vue";
 export default {
   name: "formDatePicker",
 
-  inject: [
-    "defaultInputClasses",
-    "inputDate__beforePseudoElementClasses",
-    "inputDate__afterPseudoElementClasses",
-  ],
+  inject: ["defaultInputClasses"],
 
   props: {
     newDate: {

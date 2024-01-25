@@ -38,8 +38,9 @@
 
               <FormFieldSet>
                 <FormDatePicker v-model:new-date="invoiceDate" />
-                <FormSelect
-                  v-model:default-payment-terms="paymentTerms"
+                <FormPaymentTerms
+                  v-model:payment-terms="currentPaymentTerms"
+                  :value="currentPaymentTerms"
                   label="Payment Terms" />
                 <FormInput
                   v-model:description="invoice.description"
@@ -81,14 +82,14 @@ import {
   DialogTrigger,
 } from "radix-vue";
 
-import GoBack from "@/components/Misc/GoBack.vue";
+import GoBack from "@/components/Misc/GoBack";
 import Form from "@/components/Form";
 import Input from "@/components/Form/Input";
 import Orders from "@/components/Form/Orders";
 import Address from "@/components/Form/Address";
-import Select from "@/components/Form/Select.vue";
+import PaymentTerms from "@/components/Form/Extended/PaymentTerms";
 import FieldSet from "@/components/Form/FieldSet";
-import Delete from "@/components/Svg/Delete.vue";
+import Delete from "@/components/Svg/Delete";
 import DatePicker from "@/components/Form/DatePicker";
 
 export default {
@@ -112,7 +113,7 @@ export default {
     FormAddress: Address,
     FormFieldSet: FieldSet,
     FormDatePicker: DatePicker,
-    FormSelect: Select,
+    FormPaymentTerms: PaymentTerms,
     DeleteSVG: Delete,
   },
 
@@ -120,7 +121,7 @@ export default {
     return {
       openModal: false,
       invoiceDate: "",
-      paymentTerms: null,
+      currentPaymentTerms: null,
     };
   },
 
@@ -134,7 +135,7 @@ export default {
       handler(s) {
         if (s) {
           this.invoiceDate = s?.dueDate;
-          this.paymentTerms = s?.paymentTerms;
+          this.currentPaymentTerms = s?.paymentTerms;
         }
       },
     },

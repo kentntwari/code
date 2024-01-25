@@ -28,18 +28,6 @@
 <script>
 import { ref } from "vue";
 
-const defaultInputClasses = `relative mt-2 px-5 block w-full h-12 font-bold text-black-site
-  rounded border border-slate-secondary`;
-
-const inputDate__beforePseudoElementClasses = `before:absolute before:top-0
-        before:left-0 before:[content:attr(data-date)] before:px-5 before:w-full
-        before:h-full before:flex before:items-center before:bg-white
-        before:pointer-events-none`;
-const inputDate__afterPseudoElementClasses = `after:absolute after:top-0
-        after:right-0 after:[content:var(--calendar-uri)] after:z-50
-        after:px-5 after:w-full after:h-full after:flex after:items-center
-        after:justify-end after:pointer-events-none`;
-
 export default {
   name: "FormWrapper",
 
@@ -64,9 +52,6 @@ export default {
     return {
       formData: this.formData,
       updateFormData: (key, value) => this.formData.append(key, value),
-      defaultInputClasses,
-      inputDate__beforePseudoElementClasses,
-      inputDate__afterPseudoElementClasses,
     };
   },
 

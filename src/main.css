@@ -35,14 +35,25 @@
   html[data-theme="dark"] {
     background-color: rgb(var(--color-background-dark));
   }
+
+  input {
+    @apply relative mt-2 px-5 block w-full h-12 font-bold text-black-site rounded border border-slate-secondary;
+  }
 }
 
-@layer utilities {
-  input {
+@layer components {
+  .input-calendar {
     --calendar-uri: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE0IDJoLS42NjdWLjY2N0EuNjY3LjY2NyAwIDAwMTIuNjY3IDBIMTJhLjY2Ny42NjcgMCAwMC0uNjY3LjY2N1YySDQuNjY3Vi42NjdBLjY2Ny42NjcgMCAwMDQgMGgtLjY2N2EuNjY3LjY2NyAwIDAwLS42NjYuNjY3VjJIMkMuODk3IDIgMCAyLjg5NyAwIDR2MTBjMCAxLjEwMy44OTcgMiAyIDJoMTJjMS4xMDMgMCAyLS44OTcgMi0yVjRjMC0xLjEwMy0uODk3LTItMi0yem0uNjY3IDEyYzAgLjM2Ny0uMy42NjctLjY2Ny42NjdIMkEuNjY4LjY2OCAwIDAxMS4zMzMgMTRWNi42OTNoMTMuMzM0VjE0eiIgZmlsbD0iIzdFODhDMyIgZmlsbC1ydWxlPSJub256ZXJvIiBvcGFjaXR5PSIuNSIvPjwvc3ZnPg==");
+
+    @apply before:absolute before:top-0 before:left-0 before:[content:attr(data-date)] before:px-5 before:w-full before:h-full before:flex before:items-center before:bg-white before:pointer-events-none after:absolute after:top-0
+          after:right-0 after:[content:var(--calendar-uri)] after:z-50 after:px-5 after:w-full after:h-full after:flex after:items-center after:justify-end after:pointer-events-none;
   }
 
-  select {
+  .default-input {
+    @apply relative mt-2 px-5 block w-full h-12 font-bold text-black-site rounded border border-slate-secondary;
+  }
+
+  .app-select {
     --arrow-down-uri: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iNyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMSAxbDQuMjI4IDQuMjI4TDkuNDU2IDEiIHN0cm9rZT0iIzdDNURGQSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=");
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -52,7 +63,9 @@
     background-position: right 10px center;
     background-size: 12px;
   }
+}
 
+@layer utilities {
   .loader {
     width: var(--spinner-width-small);
     aspect-ratio: 1;
