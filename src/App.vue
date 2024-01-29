@@ -3,7 +3,7 @@
     <div class="uppercase text-heading-S">Logo</div>
     <span>Toggle</span>
   </nav>
-  <main class="relative px-5 py-8">
+  <main class="relative flex-1 px-5 py-8">
     <router-view></router-view>
   </main>
 </template>

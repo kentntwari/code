@@ -82,7 +82,7 @@
             @click="
               this.$router.push({
                 name: 'edit',
-                params: { invoiceId: invoice.id.toLowerCase() },
+                params: { invoiceID: invoice.id.toLowerCase() },
               })
             ">
             Edit
@@ -94,6 +94,7 @@
     </footer>
   </template>
 
+  <!-- skeleton loader -->
   <template v-if="!invoice">
     <div class="mt-8 flex flex-col gap-5">
       <div
@@ -113,11 +114,11 @@
 </template>
 
 <script>
+import { RouterView } from "vue-router";
+import { computed } from "vue";
 import { formatDate } from "@/helpers/formatDate";
 
 // components
-import { RouterView } from "vue-router";
-
 import Status from "@/components/Status";
 import Address from "@/components/Address";
 import Table from "@/components/Orders/Table";
@@ -126,7 +127,6 @@ import ArrowLeftSVG from "@/components/Svg/ArrowLeft";
 import DeleteInvoice from "@/components/Actions/DeleteInvoice";
 import MarkAsPaidInvoice from "@/components/Actions/MarkAsPaidInvoice.vue";
 import InvoiceActionsProvider from "@/components/Actions/InvoiceActionsProvider";
-import { computed } from "vue";
 
 export default {
   name: "Current",
@@ -156,9 +156,9 @@ export default {
       return `${date} ${month} ${year}`;
     },
     dueDate() {
-      const date = formatDate(this.invoice.createdAt).day;
-      const month = formatDate(this.invoice.createdAt).month;
-      const year = formatDate(this.invoice.createdAt).year;
+      const date = formatDate(this.invoice.dueDate).day;
+      const month = formatDate(this.invoice.dueDate).month;
+      const year = formatDate(this.invoice.dueDate).year;
 
       return `${date} ${month} ${year}`;
     },
@@ -172,8 +172,12 @@ export default {
     };
   },
   created() {
+    this.$router.onError(() => {
+      window.location.reload();
+    });
+
     this.$watch(
-      () => this.$route.params.invoiceId,
+      () => this.$route.params.invoiceID,
       () => {
         this.fetchInvoice();
       },
@@ -182,7 +186,7 @@ export default {
   },
   methods: {
     async fetchInvoice() {
-      const data = await this.$fetch(`/api/invoices/${this.$route.params.invoiceId}`, {
+      const data = await this.$fetch(`/api/invoices/${this.$route.params.invoiceID}`, {
         onRequest: async () => {
           this.loading = true;
         },
@@ -196,5 +200,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

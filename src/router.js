@@ -13,12 +13,13 @@ const router = createRouter({
       children: [
         {
           path: "new",
+          name: "new",
           component: New,
         },
       ],
     },
     {
-      path: "/invoice/:invoiceId",
+      path: "/invoice/:invoiceID",
       name: "invoice",
       component: Current,
       children: [

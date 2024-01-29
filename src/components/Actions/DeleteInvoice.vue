@@ -2,16 +2,14 @@
   <AlertDialogRoot
     v-model:open="open"
     @update:open="isConfirmedPaid ? (open = false) : (open = true)">
-    <AlertDialogTrigger>
       <button
         type="button"
         class="w-[93px] h-12 flex items-center justify-center font-bold text-baseV text-white rounded-full"
         :class="
           isConfirmedPaid ? 'bg-red-secondary opacity-60 line-through' : 'bg-red-primary'
-        ">
+        " @click="open=true">
         Delete
       </button>
-    </AlertDialogTrigger>
     <AlertDialogPortal>
       <AlertDialogOverlay
         class="w-full h-full fixed top-0 left-0 z-10 bg-[rgba(0,0,0,.5)]">
@@ -21,7 +19,7 @@
             <AlertDialogTitle class="text-M">Confirm Deletion</AlertDialogTitle>
             <AlertDialogDescription class="text-base text-gray-tertiary"
               >Are you sure you want to delete invoice
-              {{ this.$route.params.invoiceId.toUpperCase() }}? This action cannot be
+              {{ this.$route.params.invoiceID.toUpperCase() }}? This action cannot be
               undone</AlertDialogDescription
             >
           </section>

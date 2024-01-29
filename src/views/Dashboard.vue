@@ -1,9 +1,9 @@
 <template>
   <Invoices v-slot="{ invoices }">
     <ul class="mt-8 flex-1 flex flex-col gap-4">
-      <li v-for="invoice in invoices" :key="randomKey()">
+      <li v-for="invoice in invoices" :key="generateRandomKey()">
         <RouterLink
-          :to="{ name: 'invoice', params: { invoiceId: invoice.id.toLowerCase() } }">
+          :to="{ name: 'invoice', params: { invoiceID: invoice.id.toLowerCase() } }">
           <Invoice
             class="p-6 bg-white flex flex-col gap-6 rounded-lg shadow-sm"
             :invoice="invoice">
@@ -50,7 +50,7 @@ export default {
     Status,
   },
   methods: {
-    randomKey() {
+    generateRandomKey() {
       return uuidv4();
     },
   },

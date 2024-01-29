@@ -27,7 +27,7 @@ export default {
     this.markAsPaid.isPaid = this.invoice?.status === "paid" ? true : false;
     this.markAsPaid.isConfirmedPaid = this.invoice?.status === "paid" ? true : false;
   },
-  
+
   provide() {
     return {
       // provide delete actions
@@ -42,6 +42,7 @@ export default {
           method: "DELETE",
           onRequest: async () => {
             this.isDeleting = true;
+            console.log(this.isDeleting);
           },
           onResponse: async () => {
             this.isDeleted = true;
