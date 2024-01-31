@@ -53,9 +53,7 @@ export default async function handler(req, res) {
 
     case "POST": {
       try {
-        console.log(req.body);
-
-        await extendedPrisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx) => {
           const client = await tx.client.upsert({
             where: {
               client_specs: {
@@ -96,7 +94,7 @@ export default async function handler(req, res) {
 
           const invoice = await tx.invoice.create({
             data: {
-              id: req.body.invoiceID.toUpperCase(),
+              id: req.body.invoice.id.toUpperCase(),
               status: "pending",
               description: req.body.invoice.description,
               paymentTerms: !req.body.invoice.paymentTerms
@@ -150,9 +148,95 @@ export default async function handler(req, res) {
     }
 
     case "PUT": {
-      console.log(req.body);
-      res.end();
-      return;
+      try {
+        await prisma.$transaction(async (tx) => {
+          const client = await tx.client.update({
+            where: {
+              id: invoice.clientId,
+            },
+            data: {
+              name: req.body.client.name,
+              email: req.body.client.email,
+              street: req.body.client.street,
+              city: req.body.client.city,
+              postCode: req.body.client.postCode,
+              country: req.body.client.country,
+            },
+          });
+
+          const sender = await tx.sender.upsert({
+            where: {
+              street: req.body.sender.street,
+              city: req.body.sender.city,
+              postCode: req.body.sender.postCode,
+              country: req.body.sender.country,
+            },
+            update: {},
+            create: {
+              street: req.body.sender.street,
+              city: req.body.sender.city,
+              postCode: req.body.sender.postCode,
+              country: req.body.sender.country,
+            },
+          });
+
+          const existingOrders = await tx.order.findMany({
+            where: {
+              invoiceId: invoice.id,
+            },
+          });
+
+          const requestBodyOrdersMap = new Map(
+            req.body.orders.map((order) => [order.id, order])
+          );
+
+          const deletedOrders = existingOrders.filter(
+            (order) => !requestBodyOrdersMap.has(order.id)
+          );
+
+          return await tx.invoice.update({
+            where: {
+              id: invoice.id,
+            },
+            data: {
+              status: req.body.invoice.status,
+              description: req.body.invoice.description,
+              paymentTerms: req.body.invoice.paymentTerms,
+              orders: {
+                upsert: req.body.orders.map((order) => ({
+                  where: {
+                    id: order.id,
+                  },
+                  update: {
+                    item: order.item,
+                    quantity: order.quantity,
+                    price: order.price,
+                    senderId: sender.id,
+                  },
+                  create: {
+                    item: order.item,
+                    quantity: order.quantity,
+                    price: order.price,
+                    clientId: client.id,
+                    senderId: sender.id,
+                  },
+                })),
+                deleteMany: deletedOrders.map((order) => ({
+                  id: order.id,
+                })),
+              },
+            },
+          });
+        });
+
+        res.status(204).end();
+        prisma.$disconnect();
+        return;
+      } catch (error) {
+        res.status(500).json({ message: "Something went wrong", error });
+        prisma.$disconnect();
+        return;
+      }
     }
 
     case "PATCH": {
@@ -164,7 +248,7 @@ export default async function handler(req, res) {
       }
 
       try {
-        await extendedPrisma.invoice.update({
+        await prisma.invoice.update({
           where: {
             id: invoice.id,
           },
@@ -174,24 +258,24 @@ export default async function handler(req, res) {
         });
 
         res.status(200).end();
-        extendedPrisma.$disconnect();
+        prisma.$disconnect();
         return;
       } catch (error) {
         res.status(500).json({ message: "Something went wrong" });
-        extendedPrisma.$disconnect();
+        prisma.$disconnect();
         return;
       }
     }
 
     case "DELETE": {
       try {
-        const orders = await extendedPrisma.order.findMany({
+        const orders = await prisma.order.findMany({
           where: {
             invoiceId: invoice.id,
           },
         });
 
-        await extendedPrisma.$transaction(async (trx) => {
+        await prisma.$transaction(async (trx) => {
           await trx.client.update({
             where: {
               id: invoice.clientId,
@@ -222,11 +306,11 @@ export default async function handler(req, res) {
         });
 
         res.status(204).end();
-        extendedPrisma.$disconnect();
+        prisma.$disconnect();
         return;
       } catch (err) {
         res.status(500).json({ message: "Something went wrong" });
-        extendedPrisma.$disconnect();
+        prisma.$disconnect();
         return;
       }
     }
