@@ -180,7 +180,7 @@
           <button
             type="button"
             class="bg-[#f9fafe] w-full h-12 font-bold text-gray-secondary flex items-center justify-center rounded-full"
-            @click="push({ item: '', quantity: 1, price: 0 })">
+            @click="push({ id: '', item: '', quantity: 1, price: 0 })">
             + Add New Item
           </button>
         </VFieldArray>
@@ -191,53 +191,73 @@
       class="fixed bottom-0 left-0 z-100 px-6 py-5 w-full bg-white flex justify-end items-center gap-2 shadow-[-6px_-2px_40px_rgba(0,0,0,.16)]">
       <button
         type="button"
-        class="min-w-20 p-2 h-12 bg-[#f9faf9] text-SV text-gray-secondary rounded-full"
-        @click="$route.name === 'edit' ? discardEdit() : cancelCreateNewInvoice()">
+        class="min-w-20 p-2 w-20 h-12 bg-[#f9faf9] text-SV text-gray-secondary rounded-full"
+        @click="$route.name === 'edit' ? (isDiscarding = true) : (isCancelling = true)"
+        :disabled="isSubmitting">
         {{ $route.name === "edit" ? "Discard" : "Cancel" }}
       </button>
       <button
         v-if="$route.name === 'edit'"
         type="submit"
-        class="min-w-20 p-2 h-12 bg-slate-primary text-SV text-gray-secondary rounded-full">
-        <template v-if="isSubmitting">
-          <div class="loader"></div>
-        </template>
-        <template v-else> Save as Draft </template>
+        name="action"
+        value="save"
+        class="min-w-20 p-2 w-[108px] h-12 flex justify-center items-center bg-slate-primary text-SV text-gray-secondary rounded-full"
+        :class="isSubmitting ? 'opacity-60' : 'opacity-100'"
+        :disabled="isSubmitting">
+        Save as Draft
       </button>
       <button
         type="submit"
-        class="min-w-20 p-2 h-12 bg-violet-primary flex items-center justify-center text-SV text-white rounded-full">
-        <template v-if="isSubmitting">
-          <div class="loader"></div>
-        </template>
-        <template v-else>
-          {{ $route.name === "edit" ? "Save & Send" : "Save Changes" }}
-        </template>
+        name="action"
+        value="publish"
+        class="min-w-20 p-2 h-12 bg-violet-primary flex items-center justify-center text-SV text-white rounded-full"
+        :class="[
+          isSubmitting ? 'opacity-40' : 'opacity-100',
+          $route.name === 'new' ? 'w-[120px]' : 'w-[108px]',
+        ]"
+        :disabled="isSubmitting">
+        {{ $route.name === "edit" ? "Save & Send" : "Save Changes" }}
       </button>
     </div>
 
-    <RAlertRoot
-      v-model:open="openSuccessModal"
-      @update:open="isConfirmedPaid ? (open = false) : (open = true)">
-      <RAlertOverlay class="w-full h-full fixed top-0 left-0 z-10 bg-[rgba(0,0,0,.5)]">
+    <!-- created invoice Alert -->
+    <RAlertRoot v-model:open="isModalOpen">
+      <RAlertOverlay
+        class="w-full h-full fixed top-0 left-0 z-10 bg-[rgba(221,203,203,0.5)]">
         <RAlertContent
           class="px-8 w-[90vw] max-w-sm h-[200px] p-6 bg-white fixed top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-between rounded-lg shadow-sm"
           @escape-key-down="handleReset">
           <section class="flex flex-col gap-5">
             <RAlertTitle class="m-auto text-M text-center">
-              <h2>Success</h2>
+              <h2 v-if="isInvoiceCreated || isInvoiceUpdated">Success</h2>
+              <h2 v-if="isDiscarding">Are you sure?</h2>
             </RAlertTitle>
-            <RAlertDescription class="m-auto text-base text-gray-tertiary"
-              >Invoice #{{ initValues.invoice.id?.toUpperCase() }} has been
-              created</RAlertDescription
-            >
+            <RAlertDescription class="m-auto text-base text-gray-tertiary">
+              <template v-if="isInvoiceCreated">
+                Invoice #{{ initValues.invoice.id?.toUpperCase() }} has been
+                created</template
+              >
+              <template v-if="isInvoiceUpdated">Changes have been made!!</template>
+              <template v-if="isDiscarding">All your changes will be lost </template>
+            </RAlertDescription>
           </section>
 
           <RAlertAction as-child>
             <button
-              class="w-fit mx-auto p-2 font-bold text-violet-primary border border-violet-primary rounded-lg"
-              @click="navigateToCreatedInvoice">
-              Go to invoice
+              class="w-fit mx-auto p-2 font-bold rounded-lg"
+              :class="[
+                isInvoiceCreated || isInvoiceUpdated
+                  ? 'text-violet-primary border border-violet-primary '
+                  : '',
+                isDiscarding ? 'bg-red-primary text-white' : '',
+              ]"
+              @click="
+                isInvoiceCreated || isInvoiceUpdated ? navigateToInvoice() : handleReset()
+              ">
+              <template v-if="isInvoiceCreated || isInvoiceUpdated">
+                Go to invoice</template
+              >
+              <template v-if="isDiscarding">Discard</template>
             </button>
           </RAlertAction>
         </RAlertContent>
@@ -254,16 +274,7 @@ import { Form, Field, FieldArray, ErrorMessage } from "vee-validate";
 import { formatDate } from "@/helpers/formatDate";
 import { generateUniqueInvoiceID } from "@/helpers/generateUniqueInvoiceID";
 import Delete from "@/components/Svg/Delete.vue";
-import {
-  AlertDialogRoot,
-  AlertDialogTrigger,
-  AlertDialogPortal,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogTitle,
-  AlertDialogAction,
-  AlertDialogDescription,
-} from "radix-vue";
+import router from "@/router";
 
 export default {
   components: {
@@ -273,15 +284,6 @@ export default {
     VField: Field,
     VFieldArray: FieldArray,
     VErrorMessage: ErrorMessage,
-    // radix components
-    RAlertRoot: AlertDialogRoot,
-    RAlertTrigger: AlertDialogTrigger,
-    RAlertPortal: AlertDialogPortal,
-    RAlertOverlay: AlertDialogOverlay,
-    RAlertContent: AlertDialogContent,
-    RAlertAction: AlertDialogAction,
-    RAlertTitle: AlertDialogTitle,
-    RAlertDescription: AlertDialogDescription,
   },
   props: {
     invoice: {
@@ -292,7 +294,7 @@ export default {
   setup(props) {
     const initState = {
       invoice: {
-        id: ref(props?.invoice?.id ?? null),
+        id: ref(props?.invoice?.id ?? generateUniqueInvoiceID()),
         description: ref(props?.invoice?.description ?? ""),
         dueDate: ref(props?.invoice?.dueDate ?? new Date()),
         paymentTerms: ref(props?.invoice?.paymentTerms ?? 1),
@@ -307,10 +309,10 @@ export default {
         country: ref(props?.invoice?.client?.country ?? ""),
       },
       sender: {
-        street: ref(props?.invoice?.senders[0].street ?? "19 Union Terrace"),
-        city: ref(props?.invoice?.senders[0].city ?? "London"),
-        postCode: ref(props?.invoice?.senders[0].postCode ?? "R1 3EZ"),
-        country: ref(props?.invoice?.senders[0].country ?? "United Kingdom"),
+        street: ref(props?.invoice?.senders[0]?.street ?? "19 Union Terrace"),
+        city: ref(props?.invoice?.senders[0]?.city ?? "London"),
+        postCode: ref(props?.invoice?.senders[0]?.postCode ?? "R1 3EZ"),
+        country: ref(props?.invoice?.senders[0]?.country ?? "United Kingdom"),
       },
       orders: ref(props?.invoice?.orders ?? []),
     };
@@ -340,19 +342,33 @@ export default {
       orders: initState.orders.value,
     };
 
-    const openSuccessModal = ref(false);
+    const availableTerms = ref([
+      { verbose: "Net 1 day", value: 1 },
+      { verbose: "Net 7 days", value: 7 },
+      { verbose: "Net 14 days", value: 14 },
+      { verbose: "Net 30 days", value: 30 },
+    ]);
 
-    return { initValues, openSuccessModal };
-  },
+    const isModalOpen = ref(false);
+    const isError = ref(false);
+    const isCancelling = ref(false);
+    const isDiscarding = ref(false);
+    const isUpdating = ref(false);
+    const isCreating = ref(false);
+    const isInvoiceCreated = ref(false);
+    const isInvoiceUpdated = ref(false);
 
-  data() {
     return {
-      availableTerms: ref([
-        { verbose: "Net 1 day", value: 1 },
-        { verbose: "Net 7 days", value: 7 },
-        { verbose: "Net 14 days", value: 14 },
-        { verbose: "Net 30 days", value: 30 },
-      ]),
+      initValues,
+      availableTerms,
+      isModalOpen,
+      isError,
+      isCancelling,
+      isDiscarding,
+      isUpdating,
+      isCreating,
+      isInvoiceCreated,
+      isInvoiceUpdated,
     };
   },
 
@@ -362,13 +378,18 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.name === "new") {
-      this.initValues.invoice.id = generateUniqueInvoiceID();
-    }
-
     this.initValues.invoice.dueDate = this.universalizeDate(
       this.initValues.invoice.dueDate
     );
+  },
+
+  watch: {
+    isCancelling(newVal) {
+      if (newVal === true) return router.push("/");
+    },
+    isDiscarding(newVal) {
+      if (newVal === true) this.isModalOpen = true;
+    },
   },
 
   methods: {
@@ -386,60 +407,86 @@ export default {
 
       return `${day} ${month} ${year}`;
     },
-    async navigateToCreatedInvoice() {
-      this.openSuccessModal = false;
+    resetErrorState() {
+      this.isError = false;
+    },
+    async navigateToInvoice() {
+      this.isInvoiceCreated = false;
       window.reload;
       this.$router.push({
         name: "invoice",
         params: { invoiceID: this.initValues.invoice.id },
       });
     },
-    async sendFormData(values) {
+
+    async sendFormData(values, $event) {
+      const submitter = $event.evt.submitter.value;
+
+      const body = {
+        ...values,
+        invoice: {
+          ...values.invoice,
+          status: submitter === "save" ? "draft" : "pending",
+        },
+      };
+
+      const url = `/api/invoices/${
+        this.$route.fullPath.name === "edit"
+          ? this.$route.params.invoiceID
+          : this.initValues.invoice.id
+      }`;
+
+      // init requests
       switch (true) {
         case this.$route.name === "edit":
-          await this.$fetch(`/api/invoices/${this.$route.params.invoiceID}`, {
+          await this.$fetch(url, {
             method: "PUT",
-            body: JSON.stringify({
-              ...values,
-            }),
+            body: JSON.stringify(body),
             headers: {
-              "Content-Type": "application/json",,
+              "Content-Type": "application/json",
             },
-            onRequest: async () => {
-              this.isLoading = true;
+            onRequest: ({ request }) => {
+              if (submitter === "save") {
+                this.isSavingDraft = true;
+              }
+
+              if (submitter) {
+                this.isUpdating = true;
+              }
             },
-            onResponse: async () => {
-              this.isLoading = true;
-              this.$router.push({
-                name: "invoice",
-                params: { invoiceID: this.$route.params.invoiceID },
-              });
+            onResponse: ({ response }) => {
+              if (submitter === "save") this.isSavingDraft = false;
+              if (submitter === "publish") this.isUpdating = false;
+
+              if (response.status === 500) this.isError = true;
+              if (response.status === 204) this.isInvoiceUpdated = true;
+
+              this.isModalOpen = true;
             },
           });
           break;
 
-        default:
-          {
-            await this.$fetch(`/api/invoices/${this.initValues.invoice.id}`, {
-              method: "POST",
-              body: JSON.stringify({
-                ...values,
-              }),
-              headers: {
-                "Content-Type": "application/json",
-              },
-              onResponse: ({ response }) => {
-                if (response.status === 201) {
-                  this.openSuccessModal = true;
-                }
-              },
-            });
-          }
+        case this.$route.name === "new":
+          await this.$fetch(url, {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+              "Content-Type": "application/json",
+            },
+            onResponse: ({ response }) => {
+              if (response.status === 500) this.isError = true;
+              if (response.status === 201) this.isInvoiceCreated = true;
+
+              this.isModalOpen = true;
+            },
+          });
+
           break;
+
+        default:
+          throw new Error("Form not configured to be called in this route");
       }
     },
   },
 };
 </script>
-
-<style lang="scss" scoped></style>
