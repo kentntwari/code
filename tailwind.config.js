@@ -94,6 +94,9 @@ export default {
           pending: "rgb(var(--color-status-pending) / <alpha-value>)",
         },
       },
+      spacing: {
+        18: "72px",
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],
