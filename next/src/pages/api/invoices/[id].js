@@ -106,35 +106,23 @@ export default async function handler(req, res) {
                   id: client.id,
                 },
               },
-              orders: {
-                createMany: {
-                  data: req.body.orders.map((order) => ({
-                    ...order,
-                    senderId: sender.id,
-                  })),
+            },
+          });
+
+          return await Promise.all(
+            req.body.orders.map(async (order) => {
+              await tx.order.create({
+                data: {
+                  item: order.item,
+                  quantity: order.quantity,
+                  price: order.price,
+                  invoiceId: invoice.id,
+                  clientId: client.id,
+                  senderId: sender.id,
                 },
-              },
-            },
-          });
-
-          const curateOrdersByInvoice = await tx.order.findMany({
-            where: {
-              invoiceId: invoice.id,
-            },
-          });
-
-          return await tx.client.update({
-            where: {
-              id: client.id,
-            },
-            data: {
-              orders: {
-                connect: curateOrdersByInvoice.map((order) => ({
-                  id: order.id,
-                })),
-              },
-            },
-          });
+              });
+            })
+          );
         });
 
         res.status(201).json({ message: "Invoice created" });

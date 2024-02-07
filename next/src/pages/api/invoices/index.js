@@ -14,10 +14,30 @@ export default async function handler(req, res) {
 
   switch (req.method) {
     case "GET": {
+      const filters = req.query?.filter;
+
+      let invoices;
+
       try {
-        const invoices = await extendedPrisma.invoice.findMany({
-          include: { client: true, orders: true },
-        });
+        switch (true) {
+          case filters !== undefined:
+            invoices = await extendedPrisma.invoice.findMany({
+              where: {
+                status: {
+                  in: [req.query.filter].flat(),
+                  mode: "insensitive",
+                },
+              },
+              include: { client: true, orders: true },
+            });
+            break;
+
+          default:
+            invoices = await extendedPrisma.invoice.findMany({
+              include: { client: true, orders: true },
+            });
+            break;
+        }
 
         res.status(200).json(invoices);
         extendedPrisma.$disconnect();
