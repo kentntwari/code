@@ -2,13 +2,13 @@
   <DialogRoot v-model:open="openModal">
     <DialogPortal to="main">
       <DialogOverlay
-        class="absolute top-0 left-0 z-10 w-full min-h-screen h-[100dvh] bg-[rgba(0,0,0,.5)]">
+        class="absolute lg:fixed top-0 left-0 lg:left-24 z-40 w-full min-h-screen h-[100dvh] bg-[rgba(0,0,0,.5)]">
         <DialogContent
-          class="px-5 absolute top-0 left-0 w-full h-full bg-white overflow-auto"
+          class="px-5 md:px-14 absolute lg:fixed top-0 left-0 lg:left-24 w-full md:w-[616px] h-full bg-white overflow-auto md:rounded-tr-3xl md:rounded-br-3xl"
           @escapeKeyDown="gobackToInvoice"
           @pointerDownOutside="gobackToInvoice">
-          <GoBackBtn class="mt-8" />
-          <DialogTitle class="mt-7 text-M">
+          <GoBackBtn class="mt-8 md:hidden" />
+          <DialogTitle class="mt-7 md:mt-14 text-M">
             <template v-if="$route.name === 'edit'">
               Edit <span class="text-gray-secondary">#</span
               >{{ $route.params.invoiceID.toUpperCase() }}
@@ -63,10 +63,13 @@ export default {
 
   methods: {
     gobackToInvoice() {
-      return this.$router.push({
-        name: "invoice",
-        params: { invoiceID: this.$route.params.invoiceID },
-      });
+      if (this.$route.name === "edit")
+        return this.$router.push({
+          name: "invoice",
+          params: { invoiceID: this.$route.params.invoiceID },
+        });
+
+      if (this.$route.name === "new") return this.$router.push("/");
     },
   },
 };

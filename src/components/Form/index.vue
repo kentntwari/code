@@ -2,93 +2,272 @@
   <VForm
     @submit="sendFormData"
     :initial-values="initValues"
+    :validation-schema="schema"
+    :validate-on-change="true"
     v-slot="{ isSubmitting, handleReset }">
-    <div class="mt-6 mb-40 grid grid-cols-1 gap-6">
-      <fieldset name="senderCredentials" class="grid grid-cols-2 gap-6">
+    <div class="mt-6 md:mt-12 mb-[200px] grid grid-cols-1 gap-3">
+      <!-- SENDER -->
+      <fieldset name="senderCredentials" class="grid grid-cols-2 md:grid-cols-3 gap-3">
         <legend class="text-SV text-violet-primary">Bill From</legend>
         <VField
           id="senderStreet"
           name="sender.street"
           value="19 Union Terrace"
-          v-slot="{ field }">
-          <label :for="field.id" class="mt-6 col-span-2 text-baseV text-gray-secondary">
+          v-slot="{ field, meta }">
+          <label
+            :for="field.id"
+            class="mt-6 col-span-3 h-[90px] text-baseV text-gray-secondary">
             Street Address
-            <input v-bind="field" type="text" class="default-input" disabled />
+            <input
+              v-bind="field"
+              type="text"
+              class="default-input"
+              :class="[
+                meta.touched
+                  ? !meta.valid
+                    ? 'outline outline-1 outline-red-primary'
+                    : 'outline outline-1 outline-green-400'
+                  : '',
+              ]"
+              disabled />
+            <VErrorMessage
+              name="sender.street"
+              as="small"
+              class="block mt-1 text-baseV text-red-primary" />
           </label>
         </VField>
-        <VField id="senderCity" name="sender.city" value="London" v-slot="{ field }">
-          <label :for="field.id" class="col-span-1 text-baseV text-gray-secondary">
+        <VField
+          id="senderCity"
+          name="sender.city"
+          value="London"
+          v-slot="{ field, meta }">
+          <label
+            :for="field.id"
+            class="col-span-1 h-[90px] text-baseV text-gray-secondary">
             City
-            <input v-bind="field" type="text" class="default-input" disabled />
+            <input
+              v-bind="field"
+              type="text"
+              class="default-input"
+              :class="[
+                meta.touched
+                  ? !meta.valid
+                    ? 'outline outline-1 outline-red-primary'
+                    : 'outline outline-1 outline-green-400'
+                  : '',
+              ]"
+              disabled />
+            <VErrorMessage
+              name="sender.city"
+              as="small"
+              class="block mt-1 text-baseV text-red-primary" />
           </label>
         </VField>
         <VField
           id="senderPostCode"
           name="sender.postCode"
           value="E1 3EZ"
-          v-slot="{ field }">
-          <label :for="field.id" class="col-span-1 text-baseV text-gray-secondary">
+          v-slot="{ field, meta }">
+          <label
+            :for="field.id"
+            class="col-span-1 h-[90px] text-baseV text-gray-secondary">
             PostCode
-            <input v-bind="field" type="text" class="default-input" disabled />
+            <input
+              v-bind="field"
+              type="text"
+              class="default-input"
+              :class="[
+                meta.touched
+                  ? !meta.valid
+                    ? 'outline outline-1 outline-red-primary'
+                    : 'outline outline-1 outline-green-400'
+                  : '',
+              ]"
+              disabled />
+            <VErrorMessage
+              name="sender.postCode"
+              as="small"
+              class="block mt-1 text-baseV text-red-primary" />
           </label>
         </VField>
         <VField
           id="senderCountry"
           name="sender.country"
           value="United Kingdom"
-          v-slot="{ field }">
-          <label :for="field.id" class="col-span-2 text-baseV text-gray-secondary">
+          v-slot="{ field, meta }">
+          <label
+            :for="field.id"
+            class="col-span-2 h-[90px] md:col-span-1 text-baseV text-gray-secondary">
             Country
-            <input v-bind="field" type="text" class="default-input" disabled />
+            <input
+              v-bind="field"
+              type="text"
+              class="default-input"
+              :class="[
+                meta.touched
+                  ? !meta.valid
+                    ? 'outline outline-1 outline-red-primary'
+                    : 'outline outline-1 outline-green-400'
+                  : '',
+              ]"
+              disabled />
+            <VErrorMessage
+              name="sender.country"
+              as="small"
+              class="block mt-1 text-baseV text-red-primary" />
           </label>
         </VField>
       </fieldset>
 
-      <fieldset name="clientCredentials" class="mt-10 grid grid-cols-2 gap-6">
+      <!-- CLIENT -->
+      <fieldset
+        name="clientCredentials"
+        class="mt-10 grid grid-cols-2 md:grid-cols-3 gap-3">
         <legend class="text-SV text-violet-primary">Bill To</legend>
-        <VField id="clientName" name="client.name" v-slot="{ field }">
-          <label :for="field.id" class="mt-6 col-span-2 text-baseV text-gray-secondary">
+        <VField id="clientName" name="client.name" v-slot="{ field, meta }">
+          <label
+            :for="field.id"
+            class="mt-6 col-span-2 md:col-span-3 h-[90px] text-baseV text-gray-secondary">
             Client's Name
-            <input v-bind="field" type="text" class="default-input" />
+            <input
+              v-bind="field"
+              type="text"
+              class="default-input"
+              :class="[
+                meta.touched
+                  ? !meta.valid
+                    ? 'outline outline-1 outline-red-primary'
+                    : 'outline outline-1 outline-green-400'
+                  : '',
+              ]" />
+            <VErrorMessage
+              name="client.name"
+              as="small"
+              class="block mt-1 text-baseV text-red-primary" />
           </label>
         </VField>
-        <VField id="clientEmail" name="client.email" v-slot="{ field }" type="email">
-          <label :for="field.id" class="col-span-2 text-baseV text-gray-secondary">
+        <VField
+          id="clientEmail"
+          name="client.email"
+          v-slot="{ field, meta }"
+          type="email">
+          <label
+            :for="field.id"
+            class="col-span-2 md:col-span-3 h-[90px] text-baseV text-gray-secondary">
             Client's Email
-            <input v-bind="field" type="email" class="default-input" />
+            <input
+              v-bind="field"
+              type="email"
+              class="default-input"
+              :class="[
+                meta.touched
+                  ? !meta.valid
+                    ? 'outline outline-1 outline-red-primary'
+                    : 'outline outline-1 outline-green-400'
+                  : '',
+              ]" />
+            <VErrorMessage
+              name="client.email"
+              as="small"
+              class="block mt-1 text-baseV text-red-primary" />
           </label>
         </VField>
-        <VField id="clientStreet" name="client.street" v-slot="{ field }">
-          <label :for="field.id" class="col-span-2 text-baseV text-gray-secondary">
+        <VField id="clientStreet" name="client.street" v-slot="{ field, meta }">
+          <label
+            :for="field.id"
+            class="col-span-2 md:col-span-3 h-[90px] text-baseV text-gray-secondary">
             Street Address
-            <input v-bind="field" type="text" class="default-input" />
+            <input
+              v-bind="field"
+              type="text"
+              class="default-input"
+              :class="[
+                meta.touched
+                  ? !meta.valid
+                    ? 'outline outline-1 outline-red-primary'
+                    : 'outline outline-1 outline-green-400'
+                  : '',
+              ]" />
+            <VErrorMessage
+              name="client.street"
+              as="small"
+              class="block mt-1 text-baseV text-red-primary" />
           </label>
         </VField>
-        <VField id="clientCity" name="client.city" v-slot="{ field }">
-          <label :for="field.id" class="col-span-1 text-baseV text-gray-secondary">
+        <VField id="clientCity" name="client.city" v-slot="{ field, meta }">
+          <label
+            :for="field.id"
+            class="col-span-1 h-[90px] text-baseV text-gray-secondary">
             City
-            <input v-bind="field" type="text" class="default-input" />
+            <input
+              v-bind="field"
+              type="text"
+              class="default-input"
+              :class="[
+                meta.touched
+                  ? !meta.valid
+                    ? 'outline outline-1 outline-red-primary'
+                    : 'outline outline-1 outline-green-400'
+                  : '',
+              ]" />
+            <VErrorMessage
+              name="client.city"
+              as="small"
+              class="block mt-1 text-baseV text-red-primary" />
           </label>
         </VField>
-        <VField id="clientPostCode" name="client.postCode" v-slot="{ field }">
-          <label :for="field.id" class="col-span-1 text-baseV text-gray-secondary">
+        <VField id="clientPostCode" name="client.postCode" v-slot="{ field, meta }">
+          <label
+            :for="field.id"
+            class="col-span-1 h-[90px] text-baseV text-gray-secondary">
             PostCode
-            <input v-bind="field" type="text" class="default-input" />
+            <input
+              v-bind="field"
+              type="text"
+              class="default-input"
+              :class="[
+                meta.touched
+                  ? !meta.valid
+                    ? 'outline outline-1 outline-red-primary'
+                    : 'outline outline-1 outline-green-400'
+                  : '',
+              ]" />
+            <VErrorMessage
+              name="client.postCode"
+              as="small"
+              class="block mt-1 text-baseV text-red-primary" />
           </label>
         </VField>
-        <VField id="clientCountry" name="client.country" v-slot="{ field }">
-          <label :for="field.id" class="col-span-2 text-baseV text-gray-secondary">
+        <VField id="clientCountry" name="client.country" v-slot="{ field, meta }">
+          <label
+            :for="field.id"
+            class="col-span-2 md:col-span-1 h-[90px] text-baseV text-gray-secondary">
             Country
-            <input v-bind="field" type="text" class="default-input" />
+            <input
+              v-bind="field"
+              type="text"
+              class="default-input"
+              :class="[
+                meta.touched
+                  ? !meta.valid
+                    ? 'outline outline-1 outline-red-primary'
+                    : 'outline outline-1 outline-green-400'
+                  : '',
+              ]" />
+            <VErrorMessage
+              name="client.country"
+              as="small"
+              class="block mt-1 text-baseV text-red-primary" />
           </label>
         </VField>
       </fieldset>
 
-      <fieldset name="invoiceDetails" class="mt-10 grid grid-cols-2 gap-6">
+      <!-- INVOICE -->
+      <fieldset name="invoiceDetails" class="mt-10 md:mt-12 grid grid-cols-2 gap-3">
         <VField id="invoiceDueDate" name="invoice.dueDate" v-slot="{ field, value }">
           <label
             :for="field.id"
-            class="col-span-2 text-baseV text-gray-secondary"
+            class="col-span-2 md:col-span-1 h-[90px] text-baseV text-gray-secondary"
             :class="$route.name === 'edit' ? 'opacity-40' : 'opacity-100'">
             Invoice Date
             <input
@@ -100,8 +279,13 @@
               :disabled="$route.name === 'edit' ? true : false" />
           </label>
         </VField>
-        <VField id="invoicePaymentTerms" name="invoice.paymentTerms" v-slot="{ field }">
-          <label :for="field.id" class="col-span-2 text-baseV text-gray-secondary">
+        <VField
+          id="invoicePaymentTerms"
+          name="invoice.paymentTerms"
+          v-slot="{ field, meta }">
+          <label
+            :for="field.id"
+            class="col-span-2 md:col-span-1 h-[90px] text-baseV text-gray-secondary">
             Payment Terms
             <select v-bind="field" class="app-select default-input">
               <option disabled>Please choose a payment term</option>
@@ -111,68 +295,143 @@
             </select>
           </label>
         </VField>
-        <VField id="invoiceDescription" name="invoice.description" v-slot="{ field }">
-          <label :for="field.id" class="col-span-2 text-baseV text-gray-secondary">
+        <VField
+          id="invoiceDescription"
+          name="invoice.description"
+          v-slot="{ field, meta }">
+          <label
+            :for="field.id"
+            class="col-span-2 h-[90px] text-baseV text-gray-secondary">
             Project Description
-            <input v-bind="field" type="text" class="default-input" />
+            <input
+              v-bind="field"
+              type="text"
+              class="default-input"
+              :class="[
+                meta.touched
+                  ? !meta.valid
+                    ? 'outline outline-1 outline-red-primary'
+                    : 'outline outline-1 outline-green-400'
+                  : '',
+              ]" />
+            <VErrorMessage
+              name="invoice.description"
+              as="small"
+              class="block mt-1 text-baseV text-red-primary" />
           </label>
         </VField>
       </fieldset>
 
-      <fieldset name="orders" class="mt-10 flex flex-col gap-6">
+      <!-- ORDERS -->
+      <fieldset name="orders" class="mt-8 flex flex-col gap-3">
         <legend
           class="font-bold text-[18px] text-[#777F98] leading-[32px] tracking-[-0.38px]">
           Item List
         </legend>
 
-        <VFieldArray name="orders" array-path="orders" v-slot="{ fields, push, remove }">
+        <VFieldArray
+          name="orders"
+          array-path="orders"
+          v-slot="{ fields, meta, push, remove }">
           <div
             v-for="(entry, idx) in fields"
             :key="entry.key"
-            class="grid grid-cols-8 items-end gap-4"
-            :class="entry.isFirst ? 'mt-6' : ''">
+            class="grid md:flex grid-cols-8 md:justify-start items-end gap-3"
+            :class="entry.isFirst ? 'mt-6 md:mt-3' : ''">
             <VField
               :id="`orderItem[${idx}]`"
               :name="`orders[${idx}].item`"
-              v-slot="{ field }">
-              <label :for="field.id" class="col-span-8 text-baseV text-gray-secondary">
+              v-slot="{ field, meta }">
+              <label
+                :for="field.id"
+                class="col-span-8 h-[90px] text-baseV text-gray-secondary">
                 Item name
-                <input v-bind="field" type="text" class="default-input" />
+                <input
+                  v-bind="field"
+                  type="text"
+                  class="default-input md:w-[214px]"
+                  :class="[
+                    meta.touched
+                      ? !meta.valid
+                        ? 'outline outline-1 outline-red-primary'
+                        : 'outline outline-1 outline-green-400'
+                      : '',
+                  ]" />
+                <VErrorMessage
+                  :name="`orders[${idx}].item`"
+                  as="small"
+                  class="block mt-1 text-baseV text-red-primary" />
               </label>
             </VField>
             <VField
               :id="`orderQuantity[${idx}]`"
               :name="`orders[${idx}].quantity`"
-              v-slot="{ field }">
-              <label :for="field.id" class="col-span-2 text-baseV text-gray-secondary">
+              v-slot="{ field, meta }">
+              <label
+                :for="field.id"
+                class="col-span-2 h-[90px] text-baseV text-gray-secondary">
                 Qty.
-                <input v-bind="field" type="number" class="default-input" />
+                <input
+                  v-bind="field"
+                  type="number"
+                  inputmode="numeric"
+                  class="default-input md:w-[46px]"
+                  :class="[
+                    meta.touched
+                      ? !meta.valid
+                        ? 'outline outline-1 outline-red-primary'
+                        : 'outline outline-1 outline-green-400'
+                      : '',
+                  ]" />
+                <VErrorMessage
+                  :name="`orders[${idx}].quantity`"
+                  as="small"
+                  class="block mt-1 text-baseV text-red-primary" />
               </label>
             </VField>
             <VField
               :id="`orderPrice[${idx}]`"
               :name="`orders[${idx}].price`"
-              v-slot="{ field }">
-              <label :for="field.id" class="col-span-3 text-baseV text-gray-secondary">
+              v-slot="{ field, meta }">
+              <label
+                :for="field.id"
+                class="col-span-3 h-[90px] text-baseV text-gray-secondary">
                 Price
-                <input v-bind="field" type="number" step="0.01" class="default-input" />
+                <input
+                  v-bind="field"
+                  type="number"
+                  inputmode="numeric"
+                  step="0.01"
+                  class="default-input"
+                  :class="[
+                    meta.touched
+                      ? !meta.valid
+                        ? 'outline outline-1 outline-red-primary'
+                        : 'outline outline-1 outline-green-400'
+                      : '',
+                  ]" />
+                <VErrorMessage
+                  :name="`orders[${idx}].price`"
+                  as="small"
+                  class="block mt-1 text-baseV text-red-primary" />
               </label>
             </VField>
 
             <label
               :for="`orderTotal[${idx}]`"
-              class="col-span-2 text-baseV text-gray-secondary border-none">
+              class="col-span-2 text-baseV h-[90px] text-gray-secondary border-none">
               Total
               <input
                 :id="`orderTotal[${idx}]`"
                 :name="`orders[${idx}].total`"
                 :value="entry.value.price * entry.value.quantity"
-                type="text"
+                type="number"
+                inputmode="numeric"
                 class="default-input px-0 border-none text-gray-secondary"
                 disabled />
             </label>
 
-            <button type="button" class="col-span-1 h-12" @click="remove(idx)">
+            <button type="button" class="col-span-1 h-[90px]" @click="remove(idx)">
               <DeleteSVG width="12" height="16" />
             </button>
           </div>
@@ -188,20 +447,20 @@
     </div>
 
     <div
-      class="fixed bottom-0 left-0 z-100 px-6 py-5 w-full bg-white flex justify-end items-center gap-2 shadow-[-6px_-2px_40px_rgba(0,0,0,.16)]">
+      class="fixed bottom-0 left-0 lg:left-24 z-50 px-6 py-5 w-full md:w-[616px] bg-white flex justify-end items-center gap-2 shadow-[-6px_-2px_40px_rgba(0,0,0,.16)]">
       <button
         type="button"
-        class="min-w-20 p-2 w-20 h-12 bg-[#f9faf9] text-SV text-gray-secondary rounded-full"
+        class="min-w-20 p-2 w-20 md:w-24 h-12 bg-[#f9faf9] font-bold text-SV text-gray-secondary rounded-full"
         @click="$route.name === 'edit' ? (isDiscarding = true) : (isCancelling = true)"
         :disabled="isSubmitting">
         {{ $route.name === "edit" ? "Discard" : "Cancel" }}
       </button>
       <button
-        v-if="$route.name === 'edit'"
+        v-if="$route.name === 'new'"
         type="submit"
         name="action"
         value="save"
-        class="min-w-20 p-2 w-[108px] h-12 flex justify-center items-center bg-slate-primary text-SV text-gray-secondary rounded-full"
+        class="min-w-20 p-2 w-[108px] h-12 flex justify-center items-center bg-slate-primary font-bold text-SV text-gray-secondary rounded-full"
         :class="isSubmitting ? 'opacity-60' : 'opacity-100'"
         :disabled="isSubmitting">
         Save as Draft
@@ -210,7 +469,7 @@
         type="submit"
         name="action"
         value="publish"
-        class="min-w-20 p-2 h-12 bg-violet-primary flex items-center justify-center text-SV text-white rounded-full"
+        class="min-w-20 p-2 h-12 bg-violet-primary flex items-center justify-center font-bold text-SV text-white rounded-full"
         :class="[
           isSubmitting ? 'opacity-40' : 'opacity-100',
           $route.name === 'new' ? 'w-[120px]' : 'w-[108px]',
@@ -264,14 +523,12 @@
       </RAlertOverlay>
     </RAlertRoot>
   </VForm>
-
-  >
 </template>
 
 <script>
 import { ref } from "vue";
-import { Form, Field, FieldArray, ErrorMessage } from "vee-validate";
 import { formatDate } from "@/helpers/formatDate";
+import { formSchema } from "@/helpers/formSchema";
 import { generateUniqueInvoiceID } from "@/helpers/generateUniqueInvoiceID";
 import Delete from "@/components/Svg/Delete.vue";
 import router from "@/router";
@@ -279,11 +536,6 @@ import router from "@/router";
 export default {
   components: {
     DeleteSVG: Delete,
-    // vee-validate components
-    VForm: Form,
-    VField: Field,
-    VFieldArray: FieldArray,
-    VErrorMessage: ErrorMessage,
   },
   props: {
     invoice: {
@@ -358,7 +610,10 @@ export default {
     const isInvoiceCreated = ref(false);
     const isInvoiceUpdated = ref(false);
 
+    const schema = formSchema;
+
     return {
+      schema,
       initValues,
       availableTerms,
       isModalOpen,
@@ -412,7 +667,6 @@ export default {
     },
     async navigateToInvoice() {
       this.isInvoiceCreated = false;
-      window.reload;
       this.$router.push({
         name: "invoice",
         params: { invoiceID: this.initValues.invoice.id },

@@ -1,39 +1,53 @@
 <template>
   <table class="flex flex-col gap-6 text-SV">
-    <thead class="px-6 pt-6 hidden lg:block">
+    <thead class="px-6 pt-6 hidden md:block md:text-base md:text-gray-secondary">
       <slot name="header">
-        <tr class="flex items-center justify-between">
-          <th>Item Name</th>
+        <tr class="md:grid md:grid-cols-6">
+          <th class="md:col-start-1 md:col-span-3 md:text-left">Item Name</th>
           <th>QTY.</th>
-          <th>Price</th>
-          <th>Total</th>
+          <th class="md:text-right">Price</th>
+          <th class="text-right">Total</th>
         </tr>
       </slot>
     </thead>
-    <tbody class="px-6 pt-6 flex flex-col gap-6">
+    <tbody
+      class="px-6 pt-6 md:pt-0 md:min-h-36 flex flex-col gap-6"
+      :class="[!orders.length ? 'justify-center' : '']">
       <slot name="body" :orders="orders">
         <tr v-if="!orders.length" class="flex items-center justify-center italic">
           No data available
         </tr>
 
-        <tr v-for="order in orders" class="flex items-center justify-between">
-          <td>
-            <div class="flex flex-col gap-2">
-              <span>{{ order.item }}</span>
-              <span class="text-gray-secondary"
-                >{{ order.quantity }} x {{ order.price }}</span
-              >
-            </div>
+        <tr v-for="order in orders" class="grid grid-cols-2 md:grid-cols-6 items-center">
+          <td class="col-start-1 md:col-start-1 md:col-span-3 md:row-start-1">
+            {{ order.item }}
           </td>
-          <td>£ {{ order.total }}</td>
+          <td class="mt-2 md:mt-0 col-start-1 md:col-start-4 row-start-2 md:row-start-1">
+            <span class="block md:hidden text-gray-secondary"
+              >{{ order.quantity }} x {{ order.price }}</span
+            >
+            <span class="hidden md:block md:text-center text-gray-secondary">{{
+              order.quantity
+            }}</span>
+          </td>
+          <td class="hidden md:block md:text-right text-gray-secondary">
+            £ {{ order.price }}
+          </td>
+          <td
+            class="row-start-1 row-end-3 flex justify-end items-center text-gray-secondary">
+            £ {{ order.total }}
+          </td>
         </tr>
       </slot>
     </tbody>
     <tfoot
       v-if="grandTotal"
-      class="px-6 pb-6 relative after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-slate-primary after:rounded-b-lg">
+      class="px-6 pb-6 relative after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-gray-primary/90 after:rounded-b-lg">
       <tr class="relative z-10 h-20 flex items-center justify-between text-white">
-        <td class="text-baseV">Grand Total</td>
+        <td class="text-baseV">
+          <span class="md:hidden">Grand Total</span>
+          <span class="hidden md:block">Amount Due</span>
+        </td>
         <td class="text-M">£ {{ grandTotal }}</td>
       </tr>
     </tfoot>

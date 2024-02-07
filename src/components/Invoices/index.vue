@@ -1,8 +1,13 @@
 <template>
   <header class="w-full flex items-center justify-between">
     <div class="text-base text-gray-secondary">
-      <h1 class="font-bold text-M">Invoices</h1>
-      <small>{{ invoices.length > 0 ? invoices.length : "No" }} invoices</small>
+      <h1 class="font-bold text-M md:text-L text-black-site">Invoices</h1>
+      <small class="block mt-1 md:mt-2 text-baseV" v-if="invoices.length > 0"
+        ><ins class="hidden md:inline-block no-underline">There are</ins>
+        {{ invoices.length > 0 ? invoices.length : "No" }}
+        <ins class="hidden md:inline-block no-underline">total</ins> invoices</small
+      >
+      <small class="block mt-1 md:mt-2 text-baseV" v-else>No invoices</small>
     </div>
 
     <div class="flex items-center gap-5">
@@ -11,23 +16,28 @@
         <button
           type="button"
           title="add new invoice"
-          class="bg-violet-primary hover:bg-violet-secondary h-11 min-w-12 px-2 flex items-center justify-center gap-2 text-white rounded-full">
+          class="bg-violet-primary hover:bg-violet-secondary h-11 md:h-12 min-w-12 px-2 flex items-center justify-center gap-2 text-white rounded-full">
           <div class="w-8 h-8 flex items-center justify-center bg-white rounded-full">
             <PlusSVG />
           </div>
-          <span class="text-SV">New <ins class="hidden no-underline">Invoice</ins></span>
+          <span class="text-SV"
+            >New <ins class="hidden md:inline-block no-underline">Invoice</ins></span
+          >
         </button>
       </RouterLink>
     </div>
   </header>
 
-  <section class="max-w-52 flex-1" v-if="!invoices.length">
+  <section
+    class="fixed md:absolute md:max-w-60 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center md:gap-8"
+    v-if="!invoices.length">
     <EmptyPackageSVG />
 
     <div class="flex flex-col items-center justify-center gap-6">
-      <h2>There is Nothing here</h2>
+      <h2 class="md:text-M">There is Nothing here</h2>
       <p class="text-center text-baseV text-gray-tertiary">
-        Create an invoice by clicking the New button and get started
+        Create an invoice by clicking the <br><span class="font-bold">New button</span> and
+        get started
       </p>
     </div>
   </section>
@@ -36,7 +46,7 @@
 </template>
 
 <script>
-// components
+import queryString from "query-string";
 import { RouterLink } from "vue-router";
 import FilterInvoices from "./FilterInvoices";
 import EmptyPackageSVG from "@/components/Svg/EmptyPackage";
@@ -52,18 +62,48 @@ export default {
   data() {
     return {
       invoices: [],
+      fetchAbortController: null,
+      invoiceCache: {},
     };
   },
   created() {
     this.fetchInvoices();
   },
+  watch: {
+    "$route.query": {
+      immediate: true,
+      handler() {
+        this.fetchInvoices();
+      },
+    },
+  },
   methods: {
     async fetchInvoices() {
-      const data = await this.$fetch("/api/invoices");
-      this.invoices = data;
+      let mounted = true;
+      const cacheKey = JSON.stringify(this.$route.query);
+
+      if (this.invoiceCache[cacheKey]) {
+        // return cached data if exists
+        this.invoices = this.invoiceCache[cacheKey];
+        return;
+      }
+
+      if (mounted) {
+        const params = queryString.parse(window.location.search, {
+          arrayFormat: "bracket",
+        });
+        const data = await this.$fetch("/api/invoices", {
+          method: "GET",
+          params,
+        });
+        this.invoices = data;
+        // store response in cache
+        this.invoiceCache[cacheKey] = data;
+      }
+      return () => {
+        mounted = false;
+      };
     },
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

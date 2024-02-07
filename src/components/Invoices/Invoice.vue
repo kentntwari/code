@@ -1,16 +1,12 @@
 <template>
   <article>
-    <header class="flex items-center justify-between">
-      <slot name="header" :id="invoice.id" :clientName="invoice.client.name"></slot>
-    </header>
+    <slot name="header" :id="invoice.id" :clientName="invoice.client.name"></slot>
     <slot v-bind="invoice"></slot>
-    <footer class="flex items-center justify-between">
-      <slot
-        name="footer"
-        :dueDate="dueDate"
-        :total="invoice.grandTotal"
-        :status="invoice.status"></slot>
-    </footer>
+    <slot
+      name="footer"
+      :dueDate="dueDate"
+      :total="invoice.grandTotal"
+      :status="invoice.status"></slot>
   </article>
 </template>
 
