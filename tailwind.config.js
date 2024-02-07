@@ -2,6 +2,10 @@
 export default {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
+    screens: {
+      md: "640px",
+      lg: "1280px",
+    },
     fontFamily: {
       sans: ["League Spartan", "sans-serif"],
     },
