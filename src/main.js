@@ -4,6 +4,8 @@ import "./main.css";
 import { createApp } from "vue";
 import App from "./App.vue";
 
+import { Form, Field, FieldArray, ErrorMessage } from "vee-validate";
+
 import {
   AlertDialogRoot,
   AlertDialogTrigger,
@@ -23,6 +25,10 @@ app.mount("#app");
 
 app.use(fetch);
 
+app.component("VForm", Form);
+app.component("VField", Field);
+app.component("VFieldArray", FieldArray);
+app.component("VErrorMessage", ErrorMessage);
 app.component("RAlertRoot", AlertDialogRoot);
 app.component("RAlertTrigger", AlertDialogTrigger);
 app.component("RAlertPortal", AlertDialogPortal);
