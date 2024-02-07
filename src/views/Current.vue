@@ -4,16 +4,46 @@
   </header>
 
   <template v-if="invoice">
-    <div class="mt-8">
+    <div class="mt-8 mb-14">
       <div class="p-6 bg-white flex items-center justify-between rounded-lg">
-        <span class="text-baseSV text-gray-secondary">Status</span>
-        <Status :status="invoice.status" />
+        <div class="w-full flex items-center justify-between md:justify-start md:gap-5">
+          <span class="text-baseSV text-gray-secondary">Status</span>
+          <Status :status="invoice.status" />
+        </div>
+
+        <ul
+          class="fixed md:relative bottom-0 left-0 z-30 px-6 pt-5 md:p-0 w-full bg-white md:bg-transparent flex items-center justify-end gap-2 shadow-[4px_0px_10px_rgba(0,0,0,.2)] md:shadow-none"
+          title="invoice navigation">
+          <li>
+            <button
+              type="edit"
+              class="w-20 h-12 bg-white flex items-center justify-center capitalize text-SV text-gray-secondary rounded-full"
+              @click="
+                this.$router.push({
+                  name: 'edit',
+                  params: { invoiceID: invoice.id.toLowerCase() },
+                })
+              ">
+              Edit
+            </button>
+          </li>
+
+          <li>
+            <DeleteInvoice :id="invoice.id" :status="invoice.status" />
+          </li>
+
+          <li>
+            <MarkAsPaidInvoice :id="invoice.id" :status="invoice.status" />
+          </li>
+        </ul>
       </div>
 
       <section
-        class="mt-5 p-6 bg-white flex flex-col gap-8 rounded-lg"
+        class="mt-5 p-6 bg-white flex flex-col gap-8 md:gap-12 rounded-lg"
         title="invoice essentials">
-        <header class="flex flex-col gap-[30px]" title="invoice header">
+        <header
+          class="flex flex-col md:flex-row md:justify-between gap-[30px]"
+          title="invoice header">
           <div class="flex flex-col gap-1">
             <h3 class="font-bold text-SV text-gray-primary">
               <span class="text-gray-secondary">#</span>{{ invoice.id }}
@@ -21,38 +51,39 @@
             <span class="text-baseV text-gray-secondary">{{ invoice.description }}</span>
           </div>
 
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 md:text-right">
             <template v-for="senderAdress in invoice.senders">
               <Address :address="senderAdress" />
             </template>
           </div>
         </header>
 
-        <div class="grid grid-cols-2" title="miscellaneous invoice information">
-          <div class="grid grid-cols-1 gap-8">
-            <section class="flex flex-col gap-3">
-              <span class="text-baseV text-gray-secondary">Invoice Date</span>
-              <h4 class="font-bold text-SV text-gray-primary">
-                {{ createdAt }}
-              </h4>
-            </section>
-            <section class="flex flex-col gap-3">
-              <span class="text-baseV text-gray-secondary">Payment Due</span>
-              <h4 class="font-bold text-SV text-gray-primary">
-                {{ dueDate }}
-              </h4>
-            </section>
-            <section class="flex flex-col gap-3">
-              <span class="text-baseV text-gray-secondary">Sent to</span>
-              <h4 class="font-bold text-SV text-gray-primary">
-                {{ invoice.client.email }}
-              </h4>
-            </section>
-          </div>
+        <div
+          class="grid grid-cols-2 md:grid-cols-6 grid-rows-[repeat(3,48px)] md:grid-rows-[repeat(2,48px)] gap-y-8"
+          title="miscellaneous invoice information">
+          <section class="col-start-1 flex flex-col gap-3">
+            <span class="text-baseV text-gray-secondary">Invoice Date</span>
+            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary">
+              {{ createdAt }}
+            </h4>
+          </section>
+          <section class="col-start-1 row-start-2 flex flex-col gap-3">
+            <span class="text-baseV text-gray-secondary">Payment Due</span>
+            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary">
+              {{ dueDate }}
+            </h4>
+          </section>
+          <section
+            class="col-start-1 md:col-start-5 md:col-span-2 row-start-3 md:row-start-1 flex flex-col gap-3">
+            <span class="text-baseV text-gray-secondary">Sent to</span>
+            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary">
+              {{ invoice.client.email }}
+            </h4>
+          </section>
 
-          <section class="flex flex-col gap-3">
+          <section class="md:col-start-3 md:col-span-2 flex flex-col gap-3">
             <span class="text-baseV text-gray-secondary">Bill to</span>
-            <h4 class="font-bold text-SV text-gray-primary">
+            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary">
               {{ invoice.client.name }}
             </h4>
             <Address
@@ -72,39 +103,18 @@
         </footer>
       </section>
     </div>
-
-    <footer class="px-6 pt-6">
-      <InvoiceActionsProvider>
-        <nav class="flex items-center gap-2" title="invoice navigation">
-          <button
-            type="edit"
-            class="w-20 h-12 bg-white flex items-center justify-center capitalize text-base text-gray-secondary rounded-full"
-            @click="
-              this.$router.push({
-                name: 'edit',
-                params: { invoiceID: invoice.id.toLowerCase() },
-              })
-            ">
-            Edit
-          </button>
-          <DeleteInvoice />
-          <MarkAsPaidInvoice />
-        </nav>
-      </InvoiceActionsProvider>
-    </footer>
   </template>
 
   <!-- skeleton loader -->
   <template v-if="!invoice">
     <div class="mt-8 flex flex-col gap-5">
       <div
-        class="bg-white w-90vh max-w-sm p-6 flex justify-between animate-pulse rounded-lg shadow-sm">
-        <div class="w-1/4 h-4 bg-gray-secondary opacity-40"></div>
-        <div class="w-1/2 h-4 bg-gray-secondary opacity-40"></div>
+        class="bg-white w-90vh p-6 flex justify-between animate-pulse rounded-lg shadow-sm">
+        <div class="w-1/4 md:w-2/12 h-4 bg-gray-secondary opacity-40"></div>
+        <div class="w-1/2 md:w-5/12 h-4 bg-gray-secondary opacity-40"></div>
       </div>
-      <div
-        class="w-90vh max-w-sm p-6 h-[300px] flex items-center justify-center animate-pulse">
-        <div class="loader" style="width: var(--spinner-width-large)"></div>
+      <div class="w-90vh p-6 h-[300px] flex items-center justify-center animate-pulse">
+        <div class="violet-loader" style="width: var(--spinner-width-large)"></div>
       </div>
     </div>
   </template>
@@ -126,7 +136,6 @@ import GoBackBtn from "@/components/Misc/GoBack.vue";
 import ArrowLeftSVG from "@/components/Svg/ArrowLeft";
 import DeleteInvoice from "@/components/Actions/DeleteInvoice";
 import MarkAsPaidInvoice from "@/components/Actions/MarkAsPaidInvoice.vue";
-import InvoiceActionsProvider from "@/components/Actions/InvoiceActionsProvider";
 
 export default {
   name: "Current",
@@ -135,7 +144,6 @@ export default {
     Status,
     Address,
     OrdersTable: Table,
-    InvoiceActionsProvider,
     DeleteInvoice,
     GoBackBtn,
     MarkAsPaidInvoice,
@@ -149,16 +157,20 @@ export default {
   },
   computed: {
     createdAt() {
-      const date = formatDate(this.invoice.createdAt).day;
-      const month = formatDate(this.invoice.createdAt).month;
-      const year = formatDate(this.invoice.createdAt).year;
+      const formatted = formatDate(this.invoice?.createdAt);
+
+      const date = formatted.day;
+      const month = formatted.month;
+      const year = formatted.year;
 
       return `${date} ${month} ${year}`;
     },
     dueDate() {
-      const date = formatDate(this.invoice.dueDate).day;
-      const month = formatDate(this.invoice.dueDate).month;
-      const year = formatDate(this.invoice.dueDate).year;
+      const formatted = formatDate(this.invoice?.dueDate);
+
+      const date = formatted.day;
+      const month = formatted.month;
+      const year = formatted.year;
 
       return `${date} ${month} ${year}`;
     },

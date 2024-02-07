@@ -1,26 +1,38 @@
 <template>
   <Invoices v-slot="{ invoices }">
-    <ul class="mt-8 flex-1 flex flex-col gap-4">
+    <ul class="mt-8 md:mt-14 flex-1 flex flex-col gap-4">
       <li v-for="invoice in invoices" :key="generateRandomKey()">
         <RouterLink
           :to="{ name: 'invoice', params: { invoiceID: invoice.id.toLowerCase() } }">
           <Invoice
-            class="p-6 bg-white flex flex-col gap-6 rounded-lg shadow-sm"
+            class="p-6 bg-white grid grid-cols-2 md:grid-cols-[58px_repeat(14,1fr)] grid-rows-[repeat(5,15px)_11px] md:grid-rows-1 md:items-center rounded-lg shadow-sm"
             :invoice="invoice">
             <template #header="{ id, clientName }">
-              <div class="font-bold text-SV">
+              <div class="row-start-1 font-bold text-SV">
                 <span class="text-gray-secondary">#</span>
                 <span>{{ id }}</span>
               </div>
-              <small class="text-baseV text-gray-secondary">{{ clientName }}</small>
+              <small
+                class="md:col-start-7 md:col-span-3 text-right md:text-left text-baseV text-gray-secondary"
+                >{{ clientName }}</small
+              >
             </template>
 
             <template #footer="{ dueDate, total, status }">
-              <div class="flex flex-col gap-2">
-                <small class="text-baseV text-gray-secondary">Due {{ dueDate }}</small>
-                <span class="text-S">£ {{ total }}</span>
+              <small
+                class="row-start-4 md:row-start-1 md:col-start-3 md:col-span-3 text-baseV text-gray-secondary"
+                >Due {{ dueDate }}</small
+              >
+              <span
+                class="mt-1 row-start-5 md:row-start-1 md:col-start-10 md:col-span-3 text-S md:text-right"
+                >£ {{ total }}</span
+              >
+              <div
+                class="row-start-4 md:row-start-1 col-span-1 md:[grid-column-start:14] flex justify-end">
+                <Status :status="status" />
               </div>
-              <Status :status="status" />
+              <ArrowRightSVG
+                class="hidden md:block md:[grid-column-start:15] md:justify-self-end" />
             </template>
           </Invoice>
         </RouterLink>
@@ -36,18 +48,18 @@
 import { v4 as uuidv4 } from "uuid";
 
 // components
-import { RouterLink, RouterView } from "vue-router";
 import Status from "@/components/Status";
 import Invoices from "@/components/Invoices";
 import Invoice from "@/components/Invoices/Invoice";
+import ArrowRightSVG from "@/components/Svg/ArrowRight";
 
 export default {
   name: "Dashboard",
   components: {
-    RouterLink,
     Invoices,
     Invoice,
     Status,
+    ArrowRightSVG,
   },
   methods: {
     generateRandomKey() {
@@ -56,5 +68,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>
