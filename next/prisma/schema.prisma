@@ -67,7 +67,6 @@ model Order {
   sender    Sender?  @relation(fields: [senderId], references: [id])
   senderId  String?  @map("sender_id")
 
-  @@unique([item, quantity, price, invoiceId], name: "order_specs")
   @@index(fields: [id], name: "id_order_idx")
   @@map("orders")
 }
