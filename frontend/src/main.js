@@ -17,7 +17,7 @@ import {
   AlertDialogDescription,
 } from "radix-vue";
 
-import fetch from "../plugins/fetch";
+import fetch from "@/plugins/fetch";
 
 const app = createApp(App).use(router);
 
