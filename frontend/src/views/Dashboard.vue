@@ -5,26 +5,26 @@
         <RouterLink
           :to="{ name: 'invoice', params: { invoiceID: invoice.id.toLowerCase() } }">
           <Invoice
-            class="p-6 bg-white grid grid-cols-2 md:grid-cols-[58px_repeat(14,1fr)] grid-rows-[repeat(5,15px)_11px] md:grid-rows-1 md:items-center rounded-lg shadow-sm"
+            class="p-6 bg-white dark:bg-gray-primary grid grid-cols-2 md:grid-cols-[58px_repeat(14,1fr)] grid-rows-[repeat(5,15px)_11px] md:grid-rows-1 md:items-center rounded-lg shadow-sm"
             :invoice="invoice">
             <template #header="{ id, clientName }">
               <div class="row-start-1 font-bold text-SV">
                 <span class="text-gray-secondary">#</span>
-                <span>{{ id }}</span>
+                <span class="dark:text-white">{{ id }}</span>
               </div>
               <small
-                class="md:col-start-7 md:col-span-3 text-right md:text-left text-baseV text-gray-secondary"
+                class="md:col-start-7 md:col-span-3 text-right md:text-left text-baseV text-gray-secondary dark:text-slate-secondary"
                 >{{ clientName }}</small
               >
             </template>
 
             <template #footer="{ dueDate, total, status }">
               <small
-                class="row-start-4 md:row-start-1 md:col-start-3 md:col-span-3 text-baseV text-gray-secondary"
+                class="row-start-4 md:row-start-1 md:col-start-3 md:col-span-3 text-baseV text-gray-secondary dark:text-slate-secondary"
                 >Due {{ dueDate }}</small
               >
               <span
-                class="mt-1 row-start-5 md:row-start-1 md:col-start-10 md:col-span-3 text-S md:text-right"
+                class="mt-1 row-start-5 md:row-start-1 md:col-start-10 md:col-span-3 text-S md:text-right dark:text-white"
                 >£ {{ total }}</span
               >
               <div

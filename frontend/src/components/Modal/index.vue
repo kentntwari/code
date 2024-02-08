@@ -4,11 +4,11 @@
       <DialogOverlay
         class="absolute lg:fixed top-0 left-0 lg:left-24 z-40 w-full min-h-screen h-[100dvh] bg-[rgba(0,0,0,.5)]">
         <DialogContent
-          class="px-5 md:px-14 absolute lg:fixed top-0 left-0 lg:left-24 w-full md:w-[616px] h-full bg-white overflow-auto md:rounded-tr-3xl md:rounded-br-3xl"
+          class="px-5 md:px-14 absolute lg:fixed top-0 left-0 lg:left-24 w-full md:w-[616px] h-full bg-white dark:bg-zinc-primary overflow-auto md:rounded-tr-3xl md:rounded-br-3xl"
           @escapeKeyDown="gobackToInvoice"
           @pointerDownOutside="gobackToInvoice">
           <GoBackBtn class="mt-8 md:hidden" />
-          <DialogTitle class="mt-7 md:mt-14 text-M">
+          <DialogTitle class="mt-7 md:mt-14 text-M dark:text-white">
             <template v-if="$route.name === 'edit'">
               Edit <span class="text-gray-secondary">#</span
               >{{ $route.params.invoiceID.toUpperCase() }}

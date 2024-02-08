@@ -19,22 +19,24 @@
         </tr>
 
         <tr v-for="order in orders" class="grid grid-cols-2 md:grid-cols-6 items-center">
-          <td class="col-start-1 md:col-start-1 md:col-span-3 md:row-start-1">
+          <td
+            class="col-start-1 md:col-start-1 md:col-span-3 md:row-start-1 dark:text-white">
             {{ order.item }}
           </td>
           <td class="mt-2 md:mt-0 col-start-1 md:col-start-4 row-start-2 md:row-start-1">
-            <span class="block md:hidden text-gray-secondary"
+            <span class="block md:hidden text-gray-secondary dark:text-slate-secondary"
               >{{ order.quantity }} x {{ order.price }}</span
             >
-            <span class="hidden md:block md:text-center text-gray-secondary">{{
-              order.quantity
-            }}</span>
+            <span
+              class="hidden md:block md:text-center text-gray-secondary dark:text-slate-secondary"
+              >{{ order.quantity }}</span
+            >
           </td>
-          <td class="hidden md:block md:text-right text-gray-secondary">
+          <td class="hidden md:block md:text-right text-gray-secondary dark:text-white">
             £ {{ order.price }}
           </td>
           <td
-            class="row-start-1 row-end-3 flex justify-end items-center text-gray-secondary">
+            class="row-start-1 row-end-3 flex justify-end items-center text-gray-secondary dark:text-white">
             £ {{ order.total }}
           </td>
         </tr>
@@ -42,11 +44,10 @@
     </tbody>
     <tfoot
       v-if="grandTotal"
-      class="px-6 pb-6 relative after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-gray-primary/90 after:rounded-b-lg">
+      class="px-6 pb-6 relative after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-gray-primary/90 dark:after:bg-black-site after:rounded-b-lg">
       <tr class="relative z-10 h-20 flex items-center justify-between text-white">
-        <td class="text-baseV">
-          <span class="md:hidden">Grand Total</span>
-          <span class="hidden md:block">Amount Due</span>
+        <td class="text-baseV dark:text-slate-secondary">
+          <span>Amount Due</span>
         </td>
         <td class="text-M">£ {{ grandTotal }}</td>
       </tr>

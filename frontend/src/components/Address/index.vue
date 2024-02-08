@@ -1,5 +1,5 @@
 <template>
-  <p class="text-base text-gray-secondary">
+  <p class="text-base text-gray-secondary dark:text-slate-secondary">
     {{ address.street }}<br />
     {{ address.city }} <br />
     {{ address.postCode }} <br />

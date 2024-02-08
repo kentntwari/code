@@ -1,10 +1,10 @@
 <template>
   <VForm
     @submit="sendFormData"
-    :initial-values="initValues"
+    :initial-values="state"
     :validation-schema="schema"
     :validate-on-change="true"
-    v-slot="{ isSubmitting, handleReset }">
+    v-slot="{ meta, isSubmitting, handleReset }">
     <div class="mt-6 md:mt-12 mb-[200px] grid grid-cols-1 gap-3">
       <!-- SENDER -->
       <fieldset name="senderCredentials" class="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -16,7 +16,7 @@
           v-slot="{ field, meta }">
           <label
             :for="field.id"
-            class="mt-6 col-span-3 h-[90px] text-baseV text-gray-secondary">
+            class="mt-6 col-span-3 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80 dark:text-slate-secondary/80">
             Street Address
             <input
               v-bind="field"
@@ -43,7 +43,7 @@
           v-slot="{ field, meta }">
           <label
             :for="field.id"
-            class="col-span-1 h-[90px] text-baseV text-gray-secondary">
+            class="col-span-1 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
             City
             <input
               v-bind="field"
@@ -70,7 +70,7 @@
           v-slot="{ field, meta }">
           <label
             :for="field.id"
-            class="col-span-1 h-[90px] text-baseV text-gray-secondary">
+            class="col-span-1 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
             PostCode
             <input
               v-bind="field"
@@ -97,7 +97,7 @@
           v-slot="{ field, meta }">
           <label
             :for="field.id"
-            class="col-span-2 h-[90px] md:col-span-1 text-baseV text-gray-secondary">
+            class="col-span-2 h-[90px] md:col-span-1 text-baseV text-gray-secondary dark:text-slate-secondary/80">
             Country
             <input
               v-bind="field"
@@ -127,7 +127,7 @@
         <VField id="clientName" name="client.name" v-slot="{ field, meta }">
           <label
             :for="field.id"
-            class="mt-6 col-span-2 md:col-span-3 h-[90px] text-baseV text-gray-secondary">
+            class="mt-6 col-span-2 md:col-span-3 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
             Client's Name
             <input
               v-bind="field"
@@ -153,7 +153,7 @@
           type="email">
           <label
             :for="field.id"
-            class="col-span-2 md:col-span-3 h-[90px] text-baseV text-gray-secondary">
+            class="col-span-2 md:col-span-3 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
             Client's Email
             <input
               v-bind="field"
@@ -175,7 +175,7 @@
         <VField id="clientStreet" name="client.street" v-slot="{ field, meta }">
           <label
             :for="field.id"
-            class="col-span-2 md:col-span-3 h-[90px] text-baseV text-gray-secondary">
+            class="col-span-2 md:col-span-3 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
             Street Address
             <input
               v-bind="field"
@@ -197,7 +197,7 @@
         <VField id="clientCity" name="client.city" v-slot="{ field, meta }">
           <label
             :for="field.id"
-            class="col-span-1 h-[90px] text-baseV text-gray-secondary">
+            class="col-span-1 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
             City
             <input
               v-bind="field"
@@ -219,7 +219,7 @@
         <VField id="clientPostCode" name="client.postCode" v-slot="{ field, meta }">
           <label
             :for="field.id"
-            class="col-span-1 h-[90px] text-baseV text-gray-secondary">
+            class="col-span-1 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
             PostCode
             <input
               v-bind="field"
@@ -241,7 +241,7 @@
         <VField id="clientCountry" name="client.country" v-slot="{ field, meta }">
           <label
             :for="field.id"
-            class="col-span-2 md:col-span-1 h-[90px] text-baseV text-gray-secondary">
+            class="col-span-2 md:col-span-1 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
             Country
             <input
               v-bind="field"
@@ -267,7 +267,7 @@
         <VField id="invoiceDueDate" name="invoice.dueDate" v-slot="{ field, value }">
           <label
             :for="field.id"
-            class="col-span-2 md:col-span-1 h-[90px] text-baseV text-gray-secondary"
+            class="col-span-2 md:col-span-1 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80"
             :class="$route.name === 'edit' ? 'opacity-40' : 'opacity-100'">
             Invoice Date
             <input
@@ -285,7 +285,7 @@
           v-slot="{ field, meta }">
           <label
             :for="field.id"
-            class="col-span-2 md:col-span-1 h-[90px] text-baseV text-gray-secondary">
+            class="col-span-2 md:col-span-1 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
             Payment Terms
             <select v-bind="field" class="app-select default-input">
               <option disabled>Please choose a payment term</option>
@@ -301,7 +301,7 @@
           v-slot="{ field, meta }">
           <label
             :for="field.id"
-            class="col-span-2 h-[90px] text-baseV text-gray-secondary">
+            class="col-span-2 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
             Project Description
             <input
               v-bind="field"
@@ -344,7 +344,7 @@
               v-slot="{ field, meta }">
               <label
                 :for="field.id"
-                class="col-span-8 h-[90px] text-baseV text-gray-secondary">
+                class="col-span-8 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
                 Item name
                 <input
                   v-bind="field"
@@ -369,13 +369,13 @@
               v-slot="{ field, meta }">
               <label
                 :for="field.id"
-                class="col-span-2 h-[90px] text-baseV text-gray-secondary">
+                class="col-span-2 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
                 Qty.
                 <input
                   v-bind="field"
                   type="number"
                   inputmode="numeric"
-                  class="default-input md:w-[46px]"
+                  class="default-input px-0 md:w-[46px] text-center"
                   :class="[
                     meta.touched
                       ? !meta.valid
@@ -395,7 +395,7 @@
               v-slot="{ field, meta }">
               <label
                 :for="field.id"
-                class="col-span-3 h-[90px] text-baseV text-gray-secondary">
+                class="col-span-3 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
                 Price
                 <input
                   v-bind="field"
@@ -419,7 +419,7 @@
 
             <label
               :for="`orderTotal[${idx}]`"
-              class="col-span-2 text-baseV h-[90px] text-gray-secondary border-none">
+              class="col-span-2 text-baseV h-[90px] text-gray-secondary dark:text-slate-secondary/80 border-none">
               Total
               <input
                 :id="`orderTotal[${idx}]`"
@@ -427,7 +427,7 @@
                 :value="entry.value.price * entry.value.quantity"
                 type="number"
                 inputmode="numeric"
-                class="default-input px-0 border-none text-gray-secondary"
+                class="default-input px-0 border-none text-gray-secondary dark:text-slate-secondary/80"
                 disabled />
             </label>
 
@@ -438,7 +438,7 @@
 
           <button
             type="button"
-            class="bg-[#f9fafe] w-full h-12 font-bold text-gray-secondary flex items-center justify-center rounded-full"
+            class="mt-6 bg-[#f9fafe] dark:bg-gray-primary/40 w-full h-12 font-bold text-gray-secondary dark:text-slate-secondary/80 flex items-center justify-center rounded-full"
             @click="push({ id: '', item: '', quantity: 1, price: 0 })">
             + Add New Item
           </button>
@@ -447,11 +447,19 @@
     </div>
 
     <div
-      class="fixed bottom-0 left-0 lg:left-24 z-50 px-6 py-5 w-full md:w-[616px] bg-white flex justify-end items-center gap-2 shadow-[-6px_-2px_40px_rgba(0,0,0,.16)]">
+      class="fixed bottom-0 left-0 lg:left-24 z-50 px-6 py-5 w-full md:w-[616px] bg-white dark:bg-slate-primary flex justify-end items-center gap-2 shadow-[-6px_-2px_40px_rgba(0,0,0,.16)]">
       <button
         type="button"
-        class="min-w-20 p-2 w-20 md:w-24 h-12 bg-[#f9faf9] font-bold text-SV text-gray-secondary rounded-full"
-        @click="$route.name === 'edit' ? (isDiscarding = true) : (isCancelling = true)"
+        class="min-w-20 p-2 w-20 md:w-24 h-12 bg-[#f9faf9] dark:bg-gray-secondary/10 font-bold text-SV text-gray-secondary dark:text-slate-secondary/80 rounded-full"
+        @click="
+          $route.name === 'edit'
+            ? meta.touched
+              ? (isDiscarding = true)
+              : $router.go(-1)
+            : meta.touched
+            ? (isDiscarding = true)
+            : (isCancelling = true)
+        "
         :disabled="isSubmitting">
         {{ $route.name === "edit" ? "Discard" : "Cancel" }}
       </button>
@@ -460,7 +468,7 @@
         type="submit"
         name="action"
         value="save"
-        class="min-w-20 p-2 w-[108px] h-12 flex justify-center items-center bg-slate-primary font-bold text-SV text-gray-secondary rounded-full"
+        class="min-w-20 p-2 w-[120px] h-12 flex justify-center items-center bg-slate-primary dark:bg-slate-secondary/20 font-bold text-SV text-gray-secondary dark:text-slate-secondary/80 rounded-full"
         :class="isSubmitting ? 'opacity-60' : 'opacity-100'"
         :disabled="isSubmitting">
         Save as Draft
@@ -482,19 +490,19 @@
     <!-- created invoice Alert -->
     <RAlertRoot v-model:open="isModalOpen">
       <RAlertOverlay
-        class="w-full h-full fixed top-0 left-0 z-10 bg-[rgba(221,203,203,0.5)]">
+        class="w-full h-full fixed top-0 left-0 z-[60] bg-[rgba(221,203,203,0.5)] dark:bg-black-site/70">
         <RAlertContent
-          class="px-8 w-[90vw] max-w-sm h-[200px] p-6 bg-white fixed top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-between rounded-lg shadow-sm"
+          class="px-8 w-[90vw] max-w-sm h-[200px] p-6 bg-white dark:bg-slate-primary fixed top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-between rounded-lg shadow-sm"
           @escape-key-down="handleReset">
           <section class="flex flex-col gap-5">
-            <RAlertTitle class="m-auto text-M text-center">
+            <RAlertTitle class="m-auto text-M text-center dark:text-white">
               <h2 v-if="isInvoiceCreated || isInvoiceUpdated">Success</h2>
               <h2 v-if="isDiscarding">Are you sure?</h2>
             </RAlertTitle>
-            <RAlertDescription class="m-auto text-base text-gray-tertiary">
+            <RAlertDescription
+              class="m-auto text-base text-gray-tertiary dark:text-slate-secondary">
               <template v-if="isInvoiceCreated">
-                Invoice #{{ initValues.invoice.id?.toUpperCase() }} has been
-                created</template
+                Invoice #{{ state.invoice.id?.toUpperCase() }} has been created</template
               >
               <template v-if="isInvoiceUpdated">Changes have been made!!</template>
               <template v-if="isDiscarding">All your changes will be lost </template>
@@ -526,7 +534,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import { formatDate } from "@/helpers/formatDate";
 import { formSchema } from "@/helpers/formSchema";
 import { generateUniqueInvoiceID } from "@/helpers/generateUniqueInvoiceID";
@@ -544,55 +552,30 @@ export default {
   },
 
   setup(props) {
-    const initState = {
+    const state = reactive({
       invoice: {
-        id: ref(props?.invoice?.id ?? generateUniqueInvoiceID()),
-        description: ref(props?.invoice?.description ?? ""),
-        dueDate: ref(props?.invoice?.dueDate ?? new Date()),
-        paymentTerms: ref(props?.invoice?.paymentTerms ?? 1),
+        id: props?.invoice?.id ?? generateUniqueInvoiceID(),
+        description: props?.invoice?.description ?? "",
+        dueDate: props?.invoice?.dueDate ?? new Date(),
+        paymentTerms: props?.invoice?.paymentTerms ?? 1,
       },
 
       client: {
-        name: ref(props?.invoice?.client?.name ?? ""),
-        email: ref(props?.invoice?.client?.email ?? ""),
-        street: ref(props?.invoice?.client?.street ?? ""),
-        city: ref(props?.invoice?.client?.city ?? ""),
-        postCode: ref(props?.invoice?.client?.postCode ?? ""),
-        country: ref(props?.invoice?.client?.country ?? ""),
+        name: props?.invoice?.client?.name ?? "",
+        email: props?.invoice?.client?.email ?? "",
+        street: props?.invoice?.client?.street ?? "",
+        city: props?.invoice?.client?.city ?? "",
+        postCode: props?.invoice?.client?.postCode ?? "",
+        country: props?.invoice?.client?.country ?? "",
       },
       sender: {
-        street: ref(props?.invoice?.senders[0]?.street ?? "19 Union Terrace"),
-        city: ref(props?.invoice?.senders[0]?.city ?? "London"),
-        postCode: ref(props?.invoice?.senders[0]?.postCode ?? "R1 3EZ"),
-        country: ref(props?.invoice?.senders[0]?.country ?? "United Kingdom"),
+        street: props?.invoice?.senders[0]?.street ?? "19 Union Terrace",
+        city: props?.invoice?.senders[0]?.city ?? "London",
+        postCode: props?.invoice?.senders[0]?.postCode ?? "R1 3EZ",
+        country: props?.invoice?.senders[0]?.country ?? "United Kingdom",
       },
-      orders: ref(props?.invoice?.orders ?? []),
-    };
-
-    const initValues = {
-      invoice: {
-        id: initState.invoice.id.value,
-        description: initState.invoice.description.value,
-        dueDate: initState.invoice.dueDate.value,
-        paymentTerms: initState.invoice.paymentTerms.value,
-      },
-
-      client: {
-        name: initState.client.name.value,
-        email: initState.client.email.value,
-        street: initState.client.street.value,
-        city: initState.client.city.value,
-        postCode: initState.client.postCode.value,
-        country: initState.client.country.value,
-      },
-      sender: {
-        street: initState.sender.street.value,
-        city: initState.sender.city.value,
-        postCode: initState.sender.postCode.value,
-        country: initState.sender.country.value,
-      },
-      orders: initState.orders.value,
-    };
+      orders: props?.invoice?.orders ?? [],
+    });
 
     const availableTerms = ref([
       { verbose: "Net 1 day", value: 1 },
@@ -602,7 +585,6 @@ export default {
     ]);
 
     const isModalOpen = ref(false);
-    const isError = ref(false);
     const isCancelling = ref(false);
     const isDiscarding = ref(false);
     const isUpdating = ref(false);
@@ -614,10 +596,9 @@ export default {
 
     return {
       schema,
-      initValues,
+      state,
       availableTerms,
       isModalOpen,
-      isError,
       isCancelling,
       isDiscarding,
       isUpdating,
@@ -629,13 +610,11 @@ export default {
 
   beforeMount() {
     if (this.$route.name === "new") {
-      this.initValues.orders.push({ item: "", quantity: 1, price: 0 });
+      this.state.orders.push({ item: "", quantity: 1, price: 0 });
     }
   },
   mounted() {
-    this.initValues.invoice.dueDate = this.universalizeDate(
-      this.initValues.invoice.dueDate
-    );
+    this.state.invoice.dueDate = this.universalizeDate(this.state.invoice.dueDate);
   },
 
   watch: {
@@ -662,14 +641,11 @@ export default {
 
       return `${day} ${month} ${year}`;
     },
-    resetErrorState() {
-      this.isError = false;
-    },
     async navigateToInvoice() {
       this.isInvoiceCreated = false;
       this.$router.push({
         name: "invoice",
-        params: { invoiceID: this.initValues.invoice.id },
+        params: { invoiceID: this.state.invoice.id },
       });
     },
 
@@ -687,53 +663,71 @@ export default {
       const url = `/api/invoices/${
         this.$route.fullPath.name === "edit"
           ? this.$route.params.invoiceID
-          : this.initValues.invoice.id
+          : this.state.invoice.id
       }`;
 
       // init requests
       switch (true) {
         case this.$route.name === "edit":
-          await this.$fetch(url, {
-            method: "PUT",
-            body: JSON.stringify(body),
-            headers: {
-              "Content-Type": "application/json",
-            },
-            onRequest: ({ request }) => {
-              if (submitter === "save") {
-                this.isSavingDraft = true;
-              }
+          try {
+            await this.$fetch(url, {
+              method: "PUT",
+              body: JSON.stringify(body),
+              headers: {
+                "Content-Type": "application/json",
+              },
+              onRequest: () => {
+                if (submitter === "save") {
+                  this.isSavingDraft = true;
+                }
 
-              if (submitter) {
-                this.isUpdating = true;
-              }
-            },
-            onResponse: ({ response }) => {
-              if (submitter === "save") this.isSavingDraft = false;
-              if (submitter === "publish") this.isUpdating = false;
+                if (submitter === "publish") {
+                  this.isUpdating = true;
+                }
+              },
+              onResponse: ({ response }) => {
+                if (submitter === "save") this.isSavingDraft = false;
+                if (submitter === "publish") this.isUpdating = false;
 
-              if (response.status === 500) this.isError = true;
-              if (response.status === 204) this.isInvoiceUpdated = true;
+                if (response.status === 204) this.isInvoiceUpdated = true;
 
-              this.isModalOpen = true;
-            },
-          });
+                this.isModalOpen = true;
+              },
+              onRequestError: () => {
+                this.isSavingDraft = false;
+                this.isUpdating = false;
+              },
+              onResponseError: () => {
+                this.isSavingDraft = false;
+                this.isUpdating = false;
+              },
+            });
+          } catch (error) {
+            console.error(error);
+          }
+
           break;
 
         case this.$route.name === "new":
-          await this.$fetch(url, {
-            method: "POST",
-            body: JSON.stringify(body),
-            headers: {
-              "Content-Type": "application/json",
-            },
-            onResponse: ({ response }) => {
-              if (response.status === 500) this.isError = true;
-              if (response.status === 201) this.isInvoiceCreated = true;
+          try {
+            await this.$fetch(url, {
+              method: "POST",
+              body: JSON.stringify(body),
+              headers: {
+                "Content-Type": "application/json",
+              },
+              onResponse: ({ response }) => {
+                if (response.status === 201) this.isInvoiceCreated = true;
 
-              this.isModalOpen = true;
-            },
-          });
+                this.isModalOpen = true;
+              },
+              onResponseError: () => {
+                this.isInvoiceCreated = false;
+              },
+            });
+          } catch (error) {
+            console.error(error);
+          }
 
           break;
 

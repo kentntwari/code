@@ -4,20 +4,24 @@
   </header>
 
   <template v-if="invoice">
-    <div class="mt-8 mb-14">
-      <div class="p-6 bg-white flex items-center justify-between rounded-lg">
+    <div class="mt-8 mb-24">
+      <div
+        class="p-6 bg-white dark:bg-gray-primary flex items-center justify-between rounded-lg">
         <div class="w-full flex items-center justify-between md:justify-start md:gap-5">
-          <span class="text-baseSV text-gray-secondary">Status</span>
+          <span
+            class="text-baseSV text-gray-seondary dark:text-slate-secondary dark:text-slate-secondary"
+            >Status</span
+          >
           <Status :status="invoice.status" />
         </div>
 
         <ul
-          class="fixed md:relative bottom-0 left-0 z-30 px-6 pt-5 md:p-0 w-full bg-white md:bg-transparent flex items-center justify-end gap-2 shadow-[4px_0px_10px_rgba(0,0,0,.2)] md:shadow-none"
+          class="fixed md:relative bottom-0 left-0 z-30 px-6 py-5 md:p-0 w-full bg-white dark:bg-gray-primary md:bg-transparent flex items-center justify-end gap-2 shadow-[4px_0px_10px_rgba(0,0,0,.2)] md:shadow-none"
           title="invoice navigation">
           <li>
             <button
               type="edit"
-              class="w-20 h-12 bg-white flex items-center justify-center capitalize text-SV text-gray-secondary rounded-full"
+              class="w-20 h-12 bg-white dark:bg-gray-secondary/10 flex items-center justify-center capitalize text-SV text-gray-seondary dark:text-slate-secondary dark:text-slate-secondary rounded-full"
               @click="
                 this.$router.push({
                   name: 'edit',
@@ -39,16 +43,19 @@
       </div>
 
       <section
-        class="mt-5 p-6 bg-white flex flex-col gap-8 md:gap-12 rounded-lg"
+        class="mt-5 p-6 bg-white dark:bg-gray-primary flex flex-col gap-8 md:gap-12 rounded-lg"
         title="invoice essentials">
         <header
           class="flex flex-col md:flex-row md:justify-between gap-[30px]"
           title="invoice header">
           <div class="flex flex-col gap-1">
-            <h3 class="font-bold text-SV text-gray-primary">
-              <span class="text-gray-secondary">#</span>{{ invoice.id }}
+            <h3 class="font-bold text-SV text-gray-primary dark:text-white dark:text-white">
+              <span class="text-gray-seondary dark:text-slate-secondary">#</span
+              >{{ invoice.id }}
             </h3>
-            <span class="text-baseV text-gray-secondary">{{ invoice.description }}</span>
+            <span class="text-baseV text-gray-seondary dark:text-slate-secondary">{{
+              invoice.description
+            }}</span>
           </div>
 
           <div class="flex items-center gap-2 md:text-right">
@@ -62,28 +69,36 @@
           class="grid grid-cols-2 md:grid-cols-6 grid-rows-[repeat(3,48px)] md:grid-rows-[repeat(2,48px)] gap-y-8"
           title="miscellaneous invoice information">
           <section class="col-start-1 flex flex-col gap-3">
-            <span class="text-baseV text-gray-secondary">Invoice Date</span>
-            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary">
+            <span class="text-baseV text-gray-seondary dark:text-slate-secondary"
+              >Invoice Date</span
+            >
+            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary dark:text-white">
               {{ createdAt }}
             </h4>
           </section>
           <section class="col-start-1 row-start-2 flex flex-col gap-3">
-            <span class="text-baseV text-gray-secondary">Payment Due</span>
-            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary">
+            <span class="text-baseV text-gray-seondary dark:text-slate-secondary"
+              >Payment Due</span
+            >
+            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary dark:text-white">
               {{ dueDate }}
             </h4>
           </section>
           <section
             class="col-start-1 md:col-start-5 md:col-span-2 row-start-3 md:row-start-1 flex flex-col gap-3">
-            <span class="text-baseV text-gray-secondary">Sent to</span>
-            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary">
+            <span class="text-baseV text-gray-seondary dark:text-slate-secondary"
+              >Sent to</span
+            >
+            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary dark:text-white">
               {{ invoice.client.email }}
             </h4>
           </section>
 
           <section class="md:col-start-3 md:col-span-2 flex flex-col gap-3">
-            <span class="text-baseV text-gray-secondary">Bill to</span>
-            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary">
+            <span class="text-baseV text-gray-seondary dark:text-slate-secondary"
+              >Bill to</span
+            >
+            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary dark:text-white">
               {{ invoice.client.name }}
             </h4>
             <Address
@@ -97,7 +112,7 @@
         </div>
 
         <footer title="invoice footer">
-          <div class="bg-[#f9fafe] rounded-lg">
+          <div class="bg-[#f9fafe] dark:bg-gray-secondary/20 rounded-lg">
             <OrdersTable :orders="invoice.orders" :grandTotal="invoice.grandTotal" />
           </div>
         </footer>
@@ -109,12 +124,12 @@
   <template v-if="!invoice">
     <div class="mt-8 flex flex-col gap-5">
       <div
-        class="bg-white w-90vh p-6 flex justify-between animate-pulse rounded-lg shadow-sm">
+        class="bg-white dark:bg-gray-primary w-90vh p-6 flex justify-between animate-pulse rounded-lg shadow-sm">
         <div class="w-1/4 md:w-2/12 h-4 bg-gray-secondary opacity-40"></div>
         <div class="w-1/2 md:w-5/12 h-4 bg-gray-secondary opacity-40"></div>
       </div>
       <div class="w-90vh p-6 h-[300px] flex items-center justify-center animate-pulse">
-        <div class="violet-loader" style="width: var(--spinner-width-large)"></div>
+        <div class="violet-loader dark:white-loader" style="width: var(--spinner-width-large)"></div>
       </div>
     </div>
   </template>

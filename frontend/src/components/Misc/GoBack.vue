@@ -5,7 +5,7 @@
     class="flex items-center gap-6 cursor-pointer"
     @click="$router.go(-1)">
     <ArrowLeftSVG />
-    <h1 class="font-bold text-heading-S text-gray-primary">Go back</h1>
+    <h1 class="font-bold text-heading-S text-gray-primary dark:text-white">Go back</h1>
   </button>
 </template>
 

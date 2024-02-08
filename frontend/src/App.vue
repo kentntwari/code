@@ -8,11 +8,11 @@
     </RouterLink>
 
     <div class="h-full lg:h-fit lg:w-full grid grid-cols-2 lg:grid-cols-1">
-      <button
-        type="button"
-        class="lg:pb-6 w-full h-full flex items-center justify-center">
-        <MoonSVG />
-      </button>
+      <ThemeSwitcher v-slot="{ isDark }">
+        <SunSVG v-if="isDark" />
+        <MoonSVG v-else />
+      </ThemeSwitcher>
+
       <div
         class="lg:py-6 w-20 h-full lg:h-auto lg:w-full flex items-center justify-center border-l lg:border-t border-gray-secondary/40">
         <img
@@ -22,20 +22,24 @@
     </div>
   </nav>
   <main
-    class="relative flex-1 m-auto px-5 md:px-12 py-8 md:py-16 w-full lg:max-w-3xl h-full">
+    class="relative flex-1 mx-auto px-5 md:px-12 py-8 md:py-16 w-full lg:max-w-3xl lg:min-h-screen">
     <router-view></router-view>
   </main>
 </template>
 
 <script>
 import LogoSVG from "@/components/Svg/Logo";
+import SunSVG from "@/components/Svg/Sun.vue";
 import MoonSVG from "@/components/Svg/Moon";
+import ThemeSwitcher from "@/components/Theme";
 
 export default {
   name: "App",
   components: {
     LogoSVG,
+    SunSVG,
     MoonSVG,
+    ThemeSwitcher,
   },
 };
 </script>

@@ -5,7 +5,7 @@ export default {
     app.config.globalProperties.$fetch = ofetch.create({
       retry: 5,
       retryDelay: 2500,
-      timeout: 3000,
+      timeout: 5000,
       onRequestError: async ({ request, error }) => {
         // Log error
         console.log("[fetch request error]", request, error);

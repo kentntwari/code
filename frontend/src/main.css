@@ -36,11 +36,10 @@
   ::-webkit-scrollbar-track {
     background: transparent;
     border-radius: 100vw;
-    margin-block: 2em;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgb(var(--color-gray-secondary)/.4);
+    background: rgb(var(--color-gray-secondary) / 0.4);
     border-radius: 100vw;
   }
 
@@ -54,7 +53,7 @@
   }
 
   input {
-    @apply relative mt-2 px-5 block w-full h-12 font-bold text-black-site rounded border border-slate-secondary;
+    @apply relative mt-2 px-5 block dark:bg-gray-primary w-full h-12 font-bold text-black-site dark:text-white rounded border border-slate-secondary dark:border-zinc-primary;
   }
 
   input[type="number"]::-webkit-inner-spin-button {
@@ -70,12 +69,12 @@
   .input-calendar {
     --calendar-uri: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE0IDJoLS42NjdWLjY2N0EuNjY3LjY2NyAwIDAwMTIuNjY3IDBIMTJhLjY2Ny42NjcgMCAwMC0uNjY3LjY2N1YySDQuNjY3Vi42NjdBLjY2Ny42NjcgMCAwMDQgMGgtLjY2N2EuNjY3LjY2NyAwIDAwLS42NjYuNjY3VjJIMkMuODk3IDIgMCAyLjg5NyAwIDR2MTBjMCAxLjEwMy44OTcgMiAyIDJoMTJjMS4xMDMgMCAyLS44OTcgMi0yVjRjMC0xLjEwMy0uODk3LTItMi0yem0uNjY3IDEyYzAgLjM2Ny0uMy42NjctLjY2Ny42NjdIMkEuNjY4LjY2OCAwIDAxMS4zMzMgMTRWNi42OTNoMTMuMzM0VjE0eiIgZmlsbD0iIzdFODhDMyIgZmlsbC1ydWxlPSJub256ZXJvIiBvcGFjaXR5PSIuNSIvPjwvc3ZnPg==");
 
-    @apply before:absolute before:top-0 before:left-0 before:[content:attr(data-date)] before:px-5 before:w-full before:h-full before:flex before:items-center before:bg-white before:pointer-events-none after:absolute after:top-0
+    @apply before:absolute before:top-0 before:left-0 before:content-[attr(data-date)] before:px-5 before:w-full before:h-full before:flex before:items-center before:bg-white dark:before:bg-gray-primary before:pointer-events-none after:absolute after:top-0
           after:right-0 after:[content:var(--calendar-uri)] after:z-50 after:px-5 after:w-full after:h-full after:flex after:items-center after:justify-end after:pointer-events-none;
   }
 
   .default-input {
-    @apply relative mt-2 px-5 md:px-4 block w-full h-12 font-bold text-black-site rounded border border-slate-secondary;
+    @apply relative mt-2 px-5 md:px-4 block w-full h-12 dark:bg-gray-primary font-bold text-black-site dark:text-white rounded border border-slate-secondary dark:border-zinc-primary;
   }
 
   .app-select {

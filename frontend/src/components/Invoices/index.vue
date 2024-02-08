@@ -1,7 +1,7 @@
 <template>
   <header class="w-full flex items-center justify-between">
-    <div class="text-base text-gray-secondary">
-      <h1 class="font-bold text-M md:text-L text-black-site">Invoices</h1>
+    <div class="text-base text-gray-secondary dark:text-slate-secondary">
+      <h1 class="font-bold text-M md:text-L text-black-site dark:text-white">Invoices</h1>
       <small class="block mt-1 md:mt-2 text-baseV" v-if="invoices.length > 0"
         ><ins class="hidden md:inline-block no-underline">There are</ins>
         {{ invoices.length > 0 ? invoices.length : "No" }}
@@ -29,15 +29,20 @@
   </header>
 
   <section
-    class="fixed md:absolute md:max-w-60 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center md:gap-8"
+    class="fixed md:max-w-60 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center md:gap-8"
     v-if="!invoices.length">
     <EmptyPackageSVG />
 
     <div class="flex flex-col items-center justify-center gap-6">
-      <h2 class="md:text-M">There is Nothing here</h2>
-      <p class="text-center text-baseV text-gray-tertiary">
-        Create an invoice by clicking the <br><span class="font-bold">New button</span> and
-        get started
+      <h2 class="md:text-M dark:text-white">There is Nothing here</h2>
+      <p class="text-center text-baseV text-gray-tertiary dark:text-slate-secondary">
+        Create an invoice by clicking the <br /><button
+          type="button"
+          class="font-bold"
+          @click="$router.push('/new')">
+          New button
+        </button>
+        and get started
       </p>
     </div>
   </section>
