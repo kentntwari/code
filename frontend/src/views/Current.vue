@@ -9,7 +9,7 @@
         class="p-6 bg-white dark:bg-gray-primary flex items-center justify-between rounded-lg">
         <div class="w-full flex items-center justify-between md:justify-start md:gap-5">
           <span
-            class="text-baseSV text-gray-seondary dark:text-slate-secondary dark:text-slate-secondary"
+            class="text-baseSV text-gray-seondary dark:text-slate-secondary"
             >Status</span
           >
           <Status :status="invoice.status" />
@@ -21,7 +21,7 @@
           <li>
             <button
               type="edit"
-              class="w-20 h-12 bg-white dark:bg-gray-secondary/10 flex items-center justify-center capitalize text-SV text-gray-seondary dark:text-slate-secondary dark:text-slate-secondary rounded-full"
+              class="w-20 h-12 bg-white dark:bg-gray-secondary/10 flex items-center justify-center capitalize text-SV text-gray-seondary dark:text-slate-secondary rounded-full"
               @click="
                 this.$router.push({
                   name: 'edit',
@@ -49,7 +49,7 @@
           class="flex flex-col md:flex-row md:justify-between gap-[30px]"
           title="invoice header">
           <div class="flex flex-col gap-1">
-            <h3 class="font-bold text-SV text-gray-primary dark:text-white dark:text-white">
+            <h3 class="font-bold text-SV text-gray-primary dark:text-white">
               <span class="text-gray-seondary dark:text-slate-secondary">#</span
               >{{ invoice.id }}
             </h3>

@@ -16,7 +16,7 @@
           v-slot="{ field, meta }">
           <label
             :for="field.id"
-            class="mt-6 col-span-3 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80 dark:text-slate-secondary/80">
+            class="mt-6 col-span-3 h-[90px] text-baseV text-gray-secondary dark:text-slate-secondary/80">
             Street Address
             <input
               v-bind="field"
