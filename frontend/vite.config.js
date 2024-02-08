@@ -14,7 +14,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/api": { target: "https://vue-invoice-app-vert.vercel.app", changeOrigin: true },
+      "/api": { target: "http://localhost:3000", changeOrigin: true },
     },
   },
 });
