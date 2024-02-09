@@ -97,10 +97,12 @@ export default {
         const params = queryString.parse(window.location.search, {
           arrayFormat: "bracket",
         });
-        const data = await this.$fetch("/api/invoices", {
-          method: "GET",
-          params,
-        });
+        const res = await fetch("/api/invoices");
+        const data = res.json();
+        // const data = await this.$fetch("/api/invoices", {
+        //   method: "GET",
+        //   params,
+        // });
         this.invoices = data;
         // store response in cache
         this.invoiceCache[cacheKey] = data;
