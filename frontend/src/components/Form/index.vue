@@ -660,7 +660,7 @@ export default {
         },
       };
 
-      const url = `/api/invoices/${
+      const url = `${import.meta.env.VITE_API_ENDPOINT}/api/invoices/${
         this.$route.fullPath.name === "edit"
           ? this.$route.params.invoiceID
           : this.state.invoice.id

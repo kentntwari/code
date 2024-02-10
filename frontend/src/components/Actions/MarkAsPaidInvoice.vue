@@ -29,17 +29,20 @@ export default {
 
   methods: {
     async confirmPaid() {
-      return await this.$fetch(`/api/invoices/${this.id}`, {
-        method: "PATCH",
-        headers: {
-          "X-patch-request-action": "mark-as-paid",
-        },
-        onResponse: async ({ response }) => {
-          if (response.ok) {
-            this.$router.go();
-          }
-        },
-      });
+      return await this.$fetch(
+        `${import.meta.env.VITE_API_ENDPOINT}/api/invoices/${this.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "X-patch-request-action": "mark-as-paid",
+          },
+          onResponse: async ({ response }) => {
+            if (response.ok) {
+              this.$router.go();
+            }
+          },
+        }
+      );
     },
   },
 };

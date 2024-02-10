@@ -8,8 +8,7 @@
       <div
         class="p-6 bg-white dark:bg-gray-primary flex items-center justify-between rounded-lg">
         <div class="w-full flex items-center justify-between md:justify-start md:gap-5">
-          <span
-            class="text-baseSV text-gray-seondary dark:text-slate-secondary"
+          <span class="text-baseSV text-gray-seondary dark:text-slate-secondary"
             >Status</span
           >
           <Status :status="invoice.status" />
@@ -72,7 +71,8 @@
             <span class="text-baseV text-gray-seondary dark:text-slate-secondary"
               >Invoice Date</span
             >
-            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary dark:text-white">
+            <h4
+              class="font-bold text-SV md:leading-[20px] text-gray-primary dark:text-white">
               {{ createdAt }}
             </h4>
           </section>
@@ -80,7 +80,8 @@
             <span class="text-baseV text-gray-seondary dark:text-slate-secondary"
               >Payment Due</span
             >
-            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary dark:text-white">
+            <h4
+              class="font-bold text-SV md:leading-[20px] text-gray-primary dark:text-white">
               {{ dueDate }}
             </h4>
           </section>
@@ -89,7 +90,8 @@
             <span class="text-baseV text-gray-seondary dark:text-slate-secondary"
               >Sent to</span
             >
-            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary dark:text-white">
+            <h4
+              class="font-bold text-SV md:leading-[20px] text-gray-primary dark:text-white">
               {{ invoice.client.email }}
             </h4>
           </section>
@@ -98,7 +100,8 @@
             <span class="text-baseV text-gray-seondary dark:text-slate-secondary"
               >Bill to</span
             >
-            <h4 class="font-bold text-SV md:leading-[20px] text-gray-primary dark:text-white">
+            <h4
+              class="font-bold text-SV md:leading-[20px] text-gray-primary dark:text-white">
               {{ invoice.client.name }}
             </h4>
             <Address
@@ -129,7 +132,9 @@
         <div class="w-1/2 md:w-5/12 h-4 bg-gray-secondary opacity-40"></div>
       </div>
       <div class="w-90vh p-6 h-[300px] flex items-center justify-center animate-pulse">
-        <div class="violet-loader dark:white-loader" style="width: var(--spinner-width-large)"></div>
+        <div
+          class="violet-loader dark:white-loader"
+          style="width: var(--spinner-width-large)"></div>
       </div>
     </div>
   </template>
@@ -213,14 +218,19 @@ export default {
   },
   methods: {
     async fetchInvoice() {
-      const data = await this.$fetch(`/api/invoices/${this.$route.params.invoiceID}`, {
-        onRequest: async () => {
-          this.loading = true;
-        },
-        onResponse: async () => {
-          this.loading = false;
-        },
-      });
+      const data = await this.$fetch(
+        `${import.meta.env.VITE_API_ENDPOINT}/api/invoices/${
+          this.$route.params.invoiceID
+        }`,
+        {
+          onRequest: async () => {
+            this.loading = true;
+          },
+          onResponse: async () => {
+            this.loading = false;
+          },
+        }
+      );
 
       this.invoice = data;
     },

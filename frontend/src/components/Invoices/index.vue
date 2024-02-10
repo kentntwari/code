@@ -97,10 +97,13 @@ export default {
         const params = queryString.parse(window.location.search, {
           arrayFormat: "bracket",
         });
-        const data = await this.$fetch("http://localhost:3000/api/invoices", {
-          method: "GET",
-          params,
-        });
+        const data = await this.$fetch(
+          `${import.meta.env.VITE_API_ENDPOINT}/api/invoices`,
+          {
+            method: "GET",
+            params,
+          }
+        );
         this.invoices = data;
         // store response in cache
         this.invoiceCache[cacheKey] = data;

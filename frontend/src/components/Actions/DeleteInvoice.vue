@@ -92,7 +92,7 @@ export default {
 
   methods: {
     async deleteInvoice() {
-      await this.$fetch(`/api/invoices/${this.id}`, {
+      await this.$fetch(`${import.meta.env.VITE_API_ENDPOINT}/api/invoices/${this.id}`, {
         method: "DELETE",
         onResponse: async () => this.$router.push({ path: "/" }),
       });

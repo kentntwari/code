@@ -1,13 +1,7 @@
+import { withCors } from "../../../../lib/withCors";
 import { prisma, extendedPrisma } from "../../../../lib/prismaClient";
 
-export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Methods", "GET", "POST", "PUT", "PATCH", "DELETE");
-
-  if (!["GET", "POST", "PUT", "PATCH", "DELETE"].includes(req.method)) {
-    res.status(405).json({ message: `Method ${req.method} Not Allowed` });
-    return;
-  }
-
+async function handler(req, res) {
   const invoice = await extendedPrisma.invoice.findFirst({
     where: {
       id: {
@@ -305,3 +299,5 @@ export default async function handler(req, res) {
       break;
   }
 }
+
+export default withCors(handler);
