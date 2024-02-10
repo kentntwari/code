@@ -1,9 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { withCors } from "../../../../lib/withCors";
 import { extendedPrisma } from "../../../../lib/prismaClient";
 
-export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Methods", "GET");
-
+async function handler(req, res) {
   if (req.method !== "GET") {
     res.status(405).json({ message: `Method ${req.method} Not Allowed` });
     return;
@@ -51,3 +50,5 @@ export default async function handler(req, res) {
       break;
   }
 }
+
+export default withCors(handler);
