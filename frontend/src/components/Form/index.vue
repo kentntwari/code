@@ -3,9 +3,8 @@
     :initial-values="state"
     :validation-schema="schema"
     :validate-on-change="true"
-    v-slot="{ isSubmitting, validate }"
-    @submit="sendFormData"
-    @invalid-submit="validate()">
+    v-slot="{ isSubmitting }"
+    @submit="sendFormData">
     <div class="mt-6 md:mt-12 mb-[200px] grid grid-cols-1 gap-3">
       <!-- SENDER -->
       <fieldset name="senderCredentials" class="grid grid-cols-2 md:grid-cols-3 gap-3">
