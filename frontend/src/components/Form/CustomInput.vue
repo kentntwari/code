@@ -16,7 +16,7 @@
         >{{ errorMessage }}</small
       >
     </div>
-    <slot :inputValue="inputValue.value" :meta="meta">
+    <slot>
       <input
         :id="id"
         :name="name"
