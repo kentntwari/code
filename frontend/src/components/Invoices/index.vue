@@ -15,7 +15,7 @@
       <RouterLink to="/new">
         <button
           type="button"
-          title="add new invoice"
+          title="Add new invoice"
           class="bg-violet-primary hover:bg-violet-secondary h-11 md:h-12 min-w-12 px-2 flex items-center justify-center gap-2 text-white rounded-full">
           <div class="w-8 h-8 flex items-center justify-center bg-white rounded-full">
             <PlusSVG />
@@ -30,7 +30,7 @@
 
   <section
     class="absolute md:max-w-60 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center md:gap-8"
-    v-if="invoices.length">
+    v-if="!invoices.length">
     <EmptyPackageSVG />
 
     <div class="flex flex-col items-center justify-center gap-6">

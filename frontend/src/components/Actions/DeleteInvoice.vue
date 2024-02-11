@@ -1,30 +1,25 @@
 <template>
-  <AlertDialogRoot
+  <RAlertRoot
     v-model:open="open"
     @update:open="status === 'paid' ? (open = false) : (open = true)">
     <button
       type="button"
-      class="w-[93px] h-12 flex items-center justify-center font-bold text-SV text-white rounded-full"
-      :class="
-        status === 'paid' ? 'bg-red-secondary opacity-60 line-through' : 'bg-red-primary'
-      "
+      class="w-[93px] bg-red-primary h-12 flex items-center justify-center font-bold text-SV text-white rounded-full"
       @click="open = true">
       Delete
     </button>
-    <AlertDialogPortal>
-      <AlertDialogOverlay
+    <RAlertPortal>
+      <RAlertOverlay
         class="w-full h-full fixed top-0 left-0 z-50 bg-black-site/50 dark:bg-black-site/70">
-        <AlertDialogContent
+        <RAlertContent
           class="px-8 w-[90vw] max-w-sm min-h-[220px] p-6 bg-white dark:bg-slate-primary fixed top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-between rounded-lg shadow-sm">
           <section class="flex flex-col gap-5">
-            <AlertDialogTitle class="text-M dark:text-white"
-              >Confirm Deletion</AlertDialogTitle
-            >
-            <AlertDialogDescription
+            <RAlertTitle class="text-M dark:text-white">Confirm Deletion</RAlertTitle>
+            <RAlertDescription
               class="text-base text-gray-tertiary dark:text-slate-secondary"
               >Are you sure you want to delete invoice
               {{ this.$route.params.invoiceID.toUpperCase() }}? This action cannot be
-              undone</AlertDialogDescription
+              undone</RAlertDescription
             >
           </section>
           <VForm @submit="deleteInvoice" v-slot="{ isSubmitting }">
@@ -45,34 +40,14 @@
               </button>
             </div>
           </VForm>
-        </AlertDialogContent>
-      </AlertDialogOverlay>
-    </AlertDialogPortal>
-  </AlertDialogRoot>
+        </RAlertContent>
+      </RAlertOverlay>
+    </RAlertPortal>
+  </RAlertRoot>
 </template>
 
 <script>
-import {
-  AlertDialogRoot,
-  AlertDialogTrigger,
-  AlertDialogPortal,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogTitle,
-  AlertDialogDescription,
-} from "radix-vue";
-
 export default {
-  components: {
-    AlertDialogRoot,
-    AlertDialogTrigger,
-    AlertDialogPortal,
-    AlertDialogOverlay,
-    AlertDialogContent,
-    AlertDialogTitle,
-    AlertDialogDescription,
-  },
-
   props: {
     id: {
       type: String,

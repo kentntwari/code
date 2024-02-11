@@ -1,5 +1,5 @@
 <template>
-  <DialogRoot v-model:open="openModal">
+  <DialogRoot v-model:open="isOpenModal">
     <DialogPortal to="main">
       <DialogOverlay
         class="absolute lg:fixed top-0 left-0 lg:left-24 z-40 w-full min-h-screen h-[100dvh] bg-[rgba(0,0,0,.5)]">
@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { computed } from "vue";
+
 import {
   DialogClose,
   DialogContent,
@@ -53,12 +55,33 @@ export default {
 
   data() {
     return {
-      openModal: false,
+      isOpenModal: false,
     };
   },
 
-  mounted() {
-    this.openModal = true;
+  provide() {
+    return {
+      isOpenModal: computed({
+        get: () => this.isOpenModal,
+        set: (bool) => (this.isOpenModal = bool),
+      }),
+    };
+  },
+
+  watch: {
+    "$route.name": {
+      immediate: true,
+      handler() {
+        this.isOpenModal = true;
+      },
+    },
+    isOpenModal: {
+      immediate: true,
+      handler(val) {
+        if (val) return;
+        this.gobackToInvoice();
+      },
+    },
   },
 
   methods: {

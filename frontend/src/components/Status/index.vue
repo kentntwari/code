@@ -20,7 +20,7 @@ export default {
           return "bg-status-paid/10 text-status-paid";
 
         default:
-          return "bg-status-draft/10 text-status-draft";
+          return "bg-status-draft/10 dark:bg-status-draft/70 text-status-draft dark:text-slate-secondary";
       }
     },
     dotClass() {
@@ -32,7 +32,7 @@ export default {
           return "bg-status-paid";
 
         default:
-          return "bg-status-draft";
+          return "bg-status-draft dark:bg-slate-secondary";
       }
     },
   },

@@ -7,7 +7,8 @@
         status === 'paid'
           ? 'bg-violet-secondary opacity-60 line-through'
           : 'bg-violet-primary'
-      ">
+      "
+      :disabled="status === 'paid'">
       <div class="white-loader" v-if="isSubmitting"></div>
       <span v-else> Mark as Paid </span>
     </button>

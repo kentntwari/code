@@ -1,41 +1,44 @@
 <template>
-  <CollapsibleRoot v-model:open="isOpen" class="relative m-auto">
-    <CollapsibleTrigger class="flex items-center gap-3">
-      <span class="text-SV text-black-site dark:text-white"
-        >Filter <ins class="hidden md:inline-block no-underline">by status</ins></span
-      >
-      <ArrowDownSVG :class="isOpen ? 'rotate-180' : ''" />
-    </CollapsibleTrigger>
-    <CollapsibleContent
-      class="absolute top-6 left-0 z-10 -translate-x-1/4 data-[state=open]:p-6 data-[state=open]:w-[192px] bg-white dark:bg-gray-primary flex flex-col gap-4 shadow-md rounded-lg">
-      <div v-for="status in arr" :key="status.text">
-        <CheckboxRoot
-          v-model:checked="status.value"
-          class="flex items-center gap-3"
-          @click="filter">
-          <span
-            class="w-4 h-4 flex items-center justify-center rounded-[2px]"
-            :class="[
-              !status.value
-                ? 'bg-violet-secondary/20 dark:bg-transparent dark:border dark:border-violet-secondary'
-                : 'bg-violet-primary',
-            ]">
-            <CheckboxIndicator @click="status.value = !status.value">
-              <CheckSVG />
-            </CheckboxIndicator>
-          </span>
-          <span class="text-SV dark:text-white capitalize">
-            {{ status.text }}
-          </span>
-        </CheckboxRoot>
-      </div>
-    </CollapsibleContent>
-  </CollapsibleRoot>
+  <OnClickOutside @trigger="isOpen = false">
+    <CollapsibleRoot v-model:open="isOpen" class="relative m-auto">
+      <CollapsibleTrigger class="flex items-center gap-3" title="Filter by status">
+        <span class="text-SV text-black-site dark:text-white"
+          >Filter <ins class="hidden md:inline-block no-underline">by status</ins></span
+        >
+        <ArrowDownSVG :class="isOpen ? 'rotate-180' : ''" />
+      </CollapsibleTrigger>
+      <CollapsibleContent
+        class="absolute top-6 left-0 z-10 -translate-x-1/4 data-[state=open]:p-6 data-[state=open]:w-[192px] bg-white dark:bg-gray-primary flex flex-col gap-4 shadow-md rounded-lg">
+        <div v-for="status in arr" :key="status.text">
+          <CheckboxRoot
+            v-model:checked="status.value"
+            class="flex items-center gap-3"
+            @click="filter">
+            <span
+              class="w-4 h-4 flex items-center justify-center rounded-[2px]"
+              :class="[
+                !status.value
+                  ? 'bg-violet-secondary/20 dark:bg-transparent dark:border dark:border-violet-secondary'
+                  : 'bg-violet-primary',
+              ]">
+              <CheckboxIndicator @click="status.value = !status.value">
+                <CheckSVG />
+              </CheckboxIndicator>
+            </span>
+            <span class="text-SV dark:text-white capitalize">
+              {{ status.text }}
+            </span>
+          </CheckboxRoot>
+        </div>
+      </CollapsibleContent>
+    </CollapsibleRoot>
+  </OnClickOutside>
 </template>
 
 <script>
-import { ref, nextTick } from "vue";
+import { nextTick } from "vue";
 import queryString from "query-string";
+import { OnClickOutside } from "@vueuse/components";
 import CheckSVG from "@/components/Svg/Check.vue";
 import ArrowDownSVG from "@/components/Svg/ArrowDown";
 import ArrowLeftSVG from "@/components/Svg/ArrowLeft";
@@ -50,6 +53,7 @@ export default {
     CollapsibleRoot,
     CollapsibleTrigger,
     CollapsibleContent,
+    OnClickOutside,
     CheckSVG,
     ArrowDownSVG,
     ArrowLeftSVG,
