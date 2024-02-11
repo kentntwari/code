@@ -86,7 +86,7 @@ async function handler(req, res) {
           const invoice = await tx.invoice.create({
             data: {
               id: req.body.invoice.id.toUpperCase(),
-              status: "pending",
+              status: req.body.invoice.status,
               description: req.body.invoice.description,
               paymentTerms: !req.body.invoice.paymentTerms
                 ? 1
