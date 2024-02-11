@@ -29,8 +29,8 @@
   </header>
 
   <section
-    class="fixed md:max-w-60 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center md:gap-8"
-    v-if="!invoices.length">
+    class="absolute md:max-w-60 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center md:gap-8"
+    v-if="invoices.length">
     <EmptyPackageSVG />
 
     <div class="flex flex-col items-center justify-center gap-6">
