@@ -4,45 +4,45 @@ export const formSchema = object({
   client: object({
     name: string()
       .matches(/\S/, "cannot be empty")
-      .required("Client name is required")
+      .required("required")
       .min(5, "must be at least 5 characters"),
     email: string()
       .matches(/\S/, "cannot be empty")
-      .required("Invalid email address")
-      .email(),
+      .required("required")
+      .email("must be a valid email address"),
     street: string()
       .matches(/\S/, "cannot be empty")
-      .required("Client street is required")
+      .required("required")
       .min(4, "must be at least 4 characters"),
     city: string()
       .matches(/\S/, "cannot be empty")
-      .required("Client city is required")
+      .required("required")
       .min(3, "must be at least 3 characters"),
     postCode: string()
       .matches(/\S/, "cannot be empty")
-      .required("Client post code is required")
+      .required("required")
       .min(5, "must be ast least 5 characters"),
     country: string()
       .matches(/\S/, "cannot be empty")
-      .required("Client country is required")
+      .required("required")
       .min(4, "must be at least 4 characters"),
   }),
   sender: object({
     street: string()
       .matches(/\S/, "cannot be empty")
-      .required("Sender street is required")
+      .required("required")
       .min(4, "must be at least 4 characters"),
     city: string()
       .matches(/\S/, "cannot be empty")
-      .required("Sender city is required")
+      .required("required")
       .min(3, "must be at least 3 characters"),
     postCode: string()
       .matches(/\S/, "cannot be empty")
-      .required("Sender post code is required")
+      .required("required")
       .min(6, "must be at least 6 characters"),
     country: string()
       .matches(/\S/, "cannot be empty")
-      .required("Sender country is required")
+      .required("required")
       .min(4, "must be at least 4 characters"),
   }),
   invoice: object({
@@ -54,13 +54,10 @@ export const formSchema = object({
     object({
       item: string()
         .matches(/\S/, "cannot be empty")
-        .required("Item name is required")
+        .required("required")
         .min(3, "must have at least 3 characters."),
-      quantity: number()
-        .integer()
-        .required("Item quantity is required")
-        .min(1, "must be at least 1"),
-      price: number().required("Item price is required").min(1, "must be at least £1"),
+      quantity: number().integer().required("required").min(1, "must be at least 1"),
+      price: number().required("required").min(1, "must be at least £1"),
     })
   ),
 });
