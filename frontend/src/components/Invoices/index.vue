@@ -39,6 +39,7 @@
         Create an invoice by clicking the <br /><button
           type="button"
           class="font-bold"
+          title="Add new invoice"
           @click="$router.push('/new')">
           New button
         </button>

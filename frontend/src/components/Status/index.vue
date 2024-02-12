@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-[104px] h-10 flex items-center justify-center gap-2 capitalize rounded-lg"
+    class="w-[104px] h-10 flex items-center justify-center gap-2 capitalize font-bold rounded-lg"
     :class="wrapperClass">
     <div class="w-2 h-2 rounded-full" :class="dotClass"></div>
     {{ status }}

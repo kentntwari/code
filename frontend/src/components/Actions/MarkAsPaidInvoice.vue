@@ -3,6 +3,7 @@
     <button
       type="submit"
       class="w-[150px] h-12 flex items-center justify-center font-bold text-SV text-white rounded-full"
+      title="Mark invoice as paid"
       :class="
         status === 'paid'
           ? 'bg-violet-secondary opacity-60 line-through'

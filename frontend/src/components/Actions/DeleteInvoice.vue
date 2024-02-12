@@ -5,7 +5,8 @@
     <button
       type="button"
       class="w-[93px] bg-red-primary h-12 flex items-center justify-center font-bold text-SV text-white rounded-full"
-      @click="open = true">
+      @click="open = true"
+      title="Delete Invoice">
       Delete
     </button>
     <RAlertPortal>

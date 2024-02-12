@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { formatDate } from "@/helpers/formatDate.js";
+import { formatToIsoString } from "@/helpers/formatDate.js";
 
 export default {
   props: {
@@ -22,11 +22,7 @@ export default {
   },
   computed: {
     dueDate() {
-      const day = formatDate(this.invoice.dueDate).day;
-      const month = formatDate(this.invoice.dueDate).month;
-      const year = formatDate(this.invoice.dueDate).year;
-
-      return `${day} ${month} ${year}`;
+      return formatToIsoString(this.invoice.dueDate);
     },
   },
 };

@@ -21,6 +21,7 @@
             <button
               type="edit"
               class="w-20 h-12 bg-white dark:bg-gray-secondary/10 flex items-center justify-center capitalize text-SV text-gray-seondary dark:text-slate-secondary rounded-full"
+              title="Edit invoice"
               @click="
                 this.$router.push({
                   name: 'edit',
@@ -146,7 +147,7 @@
 <script>
 import { RouterView } from "vue-router";
 import { computed } from "vue";
-import { formatDate } from "@/helpers/formatDate";
+import { formatToIsoString } from "@/helpers/formatDate";
 
 // components
 import Status from "@/components/Status";
@@ -177,22 +178,10 @@ export default {
   },
   computed: {
     createdAt() {
-      const formatted = formatDate(this.invoice?.createdAt);
-
-      const date = formatted.day;
-      const month = formatted.month;
-      const year = formatted.year;
-
-      return `${date} ${month} ${year}`;
+      return formatToIsoString(this.invoice?.createdAt);
     },
     dueDate() {
-      const formatted = formatDate(this.invoice?.dueDate);
-
-      const date = formatted.day;
-      const month = formatted.month;
-      const year = formatted.year;
-
-      return `${date} ${month} ${year}`;
+      return formatToIsoString(this.invoice?.dueDate);
     },
     tablePadding() {
       return "p-6";

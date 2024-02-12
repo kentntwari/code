@@ -96,9 +96,9 @@
               v-bind="field"
               type="date"
               class="default-input input-calendar"
-              :value="universalizeDate(value)"
-              :data-date="simplifyDate(value)"
-              :min="universalizeDate(new Date())"
+              :value="formatToISO8601(value)"
+              :data-date="formatToIsoString(value)"
+              :min="formatToISO8601()"
               :disabled="$route.name === 'edit' ? true : false" />
           </label>
         </VField>
@@ -191,6 +191,7 @@
           <button
             type="button"
             class="mt-6 bg-[#f9fafe] dark:bg-gray-primary/40 w-full h-12 font-bold text-gray-secondary dark:text-slate-secondary/80 flex items-center justify-center rounded-full"
+            title="Add new item"
             @click="push({ id: '', item: '', quantity: 1, price: 0 })">
             + Add New Item
           </button>
@@ -199,7 +200,8 @@
     </div>
 
     <div
-      class="fixed bottom-0 left-0 lg:left-24 z-50 px-6 py-5 w-full md:w-[616px] bg-white dark:bg-slate-primary flex justify-end items-center gap-2 shadow-[-6px_-2px_40px_rgba(0,0,0,.16)]">
+      class="fixed bottom-0 left-0 lg:left-24 z-50 px-6 py-5 w-full md:w-[616px] bg-white dark:bg-slate-primary flex justify-end items-center gap-2 shadow-[-6px_-2px_40px_rgba(0,0,0,.16)]"
+      :class="$route.name === 'new' ? 'md:justify-between' : ''">
       <button
         type="button"
         class="min-w-20 p-2 w-20 md:w-24 h-12 bg-[#f9faf9] dark:bg-gray-secondary/10 font-bold text-SV text-gray-secondary dark:text-slate-secondary/80 rounded-full"
@@ -208,45 +210,47 @@
         :disabled="isSubmitting">
         {{ $route.name === "edit" ? "Cancel" : "Discard" }}
       </button>
-      <button
-        v-if="$route.name === 'new'"
-        type="submit"
-        value="save"
-        title="Save form as draft"
-        class="min-w-20 p-2 w-[120px] h-12 flex justify-center items-center bg-slate-primary dark:bg-slate-secondary/20 font-bold text-SV text-gray-secondary dark:text-slate-secondary/80 rounded-full"
-        :class="isSubmitting ? 'opacity-60' : 'opacity-100'"
-        :disabled="isSubmitting">
-        <template v-if="isSavingDraft">
-          <div class="white-loader"></div>
-        </template>
+      <div class="flex items-center gap-2">
+        <button
+          v-if="$route.name === 'new'"
+          type="submit"
+          value="save"
+          title="Save form as draft"
+          class="min-w-20 p-2 w-[120px] h-12 flex justify-center items-center bg-slate-primary dark:bg-slate-secondary/20 font-bold text-SV text-gray-secondary dark:text-slate-secondary/80 rounded-full"
+          :class="isSubmitting ? 'opacity-60' : 'opacity-100'"
+          :disabled="isSubmitting">
+          <template v-if="isSavingDraft">
+            <div class="white-loader"></div>
+          </template>
 
-        <template v-else>Save as Draft</template>
-      </button>
-      <button
-        type="submit"
-        value="publish"
-        class="min-w-20 p-2 h-12 bg-violet-primary flex items-center justify-center font-bold text-SV text-white rounded-full"
-        :title="$route.name === 'edit' ? 'Save edited form' : 'Save changes'"
-        :class="[
-          isSubmitting ? 'opacity-40' : 'opacity-100',
-          $route.name === 'new' ? 'w-[120px]' : 'w-[108px]',
-        ]"
-        :disabled="isSubmitting">
-        <template v-if="isUpdating || isCreating">
-          <div class="white-loader"></div>
-        </template>
+          <template v-else>Save as Draft</template>
+        </button>
+        <button
+          type="submit"
+          value="publish"
+          class="min-w-20 p-2 h-12 bg-violet-primary flex items-center justify-center font-bold text-SV text-white rounded-full"
+          :title="$route.name === 'edit' ? 'Save edited form' : 'Save changes'"
+          :class="[
+            isSubmitting ? 'opacity-40' : 'opacity-100',
+            $route.name === 'new' ? 'w-[120px]' : 'w-[108px]',
+          ]"
+          :disabled="isSubmitting">
+          <template v-if="isUpdating || isCreating">
+            <div class="white-loader"></div>
+          </template>
 
-        <template v-else>
-          {{ $route.name === "edit" ? "Save & Send" : "Save Changes" }}
-        </template>
-      </button>
+          <template v-else>
+            {{ $route.name === "edit" ? "Save & Send" : "Save Changes" }}
+          </template>
+        </button>
+      </div>
     </div>
   </VForm>
 </template>
 
 <script>
 import { ref, reactive } from "vue";
-import { formatDate } from "@/helpers/formatDate";
+import { formatToIsoString, formatToISO8601 } from "@/helpers/formatDate";
 import { formSchema } from "@/helpers/formSchema";
 import { generateUniqueInvoiceID } from "@/helpers/generateUniqueInvoiceID";
 import CustomInput from "./CustomInput";
@@ -310,6 +314,8 @@ export default {
     return {
       schema,
       state,
+      formatToIsoString,
+      formatToISO8601,
       availableTerms,
       isUpdating,
       isCreating,
@@ -325,24 +331,10 @@ export default {
     }
   },
   mounted() {
-    this.state.invoice.dueDate = this.universalizeDate(this.state.invoice.dueDate);
+    this.state.invoice.dueDate = formatToISO8601(this.state.invoice.dueDate);
   },
 
   methods: {
-    universalizeDate(date) {
-      const day = formatDate(date, "universal").day;
-      const month = formatDate(date, "universal").month;
-      const year = formatDate(date, "universal").year;
-
-      return `${year}-${month}-${day}`;
-    },
-    simplifyDate(date) {
-      const day = formatDate(date, "simplified").day;
-      const month = formatDate(date, "simplified").month;
-      const year = formatDate(date, "simplified").year;
-
-      return `${day} ${month} ${year}`;
-    },
     navigateToInvoice() {
       if (this.$route.name === "new") this.isInvoiceCreated = false;
       if (this.$route.name === "edit") this.isInvoiceUpdated = false;

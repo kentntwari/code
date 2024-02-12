@@ -11,7 +11,7 @@
       </slot>
     </thead>
     <tbody
-      class="px-6 pt-6 md:pt-0 md:min-h-36 flex flex-col gap-6"
+      class="px-6 pt-6 md:pt-0 md:min-h-36 md:max-h-48 md:overflow-auto flex flex-col gap-6"
       :class="[!orders.length ? 'justify-center' : '']">
       <slot name="body" :orders="orders">
         <tr v-if="!orders.length" class="flex items-center justify-center italic">
