@@ -68,4 +68,4 @@ This project also enabled me to see how flawed the application code can be when 
 
 ## Author
 
-- Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/kentntwari)
+- Frontend Mentor - [@kentntwari](https://www.frontendmentor.io/profile/kentntwari)
