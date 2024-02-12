@@ -1,26 +1,20 @@
-export function formatDate(date, style = null) {
-  const initDate = new Date(date);
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 
-  if (!style || style === "simplified") {
-    const day = initDate.getDate().toString().padStart(2, "0");
-    const month = initDate.toLocaleString("en-US", { month: "short" });
-    const year = initDate.getFullYear();
-    return {
-      day,
-      month,
-      year,
-    };
+dayjs.extend(utc);
+
+export function formatToIsoString(date) {
+  if (date) {
+    return dayjs.utc(date).format("D MMM YYYY");
   }
 
-  if (style === "universal") {
-    const year = initDate.getFullYear();
-    const month = String(initDate.getMonth() + 1).padStart(2, "0"); // January is 0!
-    const day = String(initDate.getDate()).padStart(2, "0");
+  return dayjs.utc().format("D MMM YYYY");
+}
 
-    return {
-      day,
-      month,
-      year,
-    };
+export function formatToISO8601(date) {
+  if (date) {
+    return dayjs.utc(date).format("YYYY-MM-DD");
   }
+
+  return dayjs.utc().format("YYYY-MM-DD");
 }
